@@ -5,6 +5,47 @@ import { createClient } from "@/lib/supabase/server"
 import { tournamentSchema, type TournamentFormData } from "@/lib/schemas/tournamentSchema"
 import type { ActionResult, Tournament } from "@/types"
 
+function sanitizeNumber(val: any): number | null {
+  if (val === "" || val === null || val === undefined) return null
+  const num = Number(val)
+  return isNaN(num) ? null : num
+}
+
+function sanitizeString(val: any): string | null {
+  if (val === null || val === undefined) return null
+  if (typeof val !== "string") return String(val)
+  const trimmed = val.trim()
+  return trimmed === "" ? null : trimmed
+}
+
+function buildTournamentPayload(data: TournamentFormData, userId?: string) {
+  return {
+    title: data.title.trim(),
+    slug: data.slug.trim(),
+    type: data.type,
+    status: data.status,
+    description: sanitizeString(data.description),
+    content: sanitizeString(data.content),
+    cover_image_url: sanitizeString(data.cover_image_url),
+    location: sanitizeString(data.location),
+    location_maps_url: sanitizeString(data.location_maps_url),
+    start_date: data.start_date,
+    end_date: sanitizeString(data.end_date),
+    registration_deadline: sanitizeString(data.registration_deadline),
+    max_participants: sanitizeNumber(data.max_participants),
+    entry_fee: sanitizeNumber(data.entry_fee),
+    prize_pool: sanitizeString(data.prize_pool),
+    time_control: sanitizeString(data.time_control),
+    rounds: sanitizeNumber(data.rounds),
+    inscription_type: data.inscription_type,
+    inscription_url: sanitizeString(data.inscription_url),
+    organizer_name: sanitizeString(data.organizer_name),
+    organizer_contact: sanitizeString(data.organizer_contact),
+    is_featured: Boolean(data.is_featured),
+    ...(userId ? { created_by: userId } : {}),
+  }
+}
+
 /**
  * Crea un nuevo torneo en la base de datos
  */
@@ -25,15 +66,7 @@ export async function createTournamentAction(
       return { success: false, error: "No autorizado. Inicia sesión para continuar." }
     }
 
-    const payload = {
-      ...validated.data,
-      created_by: user.id,
-      cover_image_url: validated.data.cover_image_url || null,
-      end_date: validated.data.end_date || null,
-      registration_deadline: validated.data.registration_deadline || null,
-      location_maps_url: validated.data.location_maps_url || null,
-      inscription_url: validated.data.inscription_url || null,
-    }
+    const payload = buildTournamentPayload(validated.data, user.id)
 
     const { data, error } = await supabase
       .from("tournaments")
@@ -84,12 +117,7 @@ export async function updateTournamentAction(
     }
 
     const payload = {
-      ...validated.data,
-      cover_image_url: validated.data.cover_image_url || null,
-      end_date: validated.data.end_date || null,
-      registration_deadline: validated.data.registration_deadline || null,
-      location_maps_url: validated.data.location_maps_url || null,
-      inscription_url: validated.data.inscription_url || null,
+      ...buildTournamentPayload(validated.data),
       updated_at: new Date().toISOString(),
     }
 
