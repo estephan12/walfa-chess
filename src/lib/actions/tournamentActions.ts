@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { tournamentSchema, type TournamentFormData } from "@/lib/schemas/tournamentSchema"
 import type { ActionResult, Tournament } from "@/types"
 
@@ -179,7 +179,8 @@ export async function deleteTournamentAction(id: string): Promise<ActionResult<v
 }
 
 /**
- * Sube una imagen de portada al bucket de Supabase Storage
+ * Sube una imagen de portada al bucket de Supabase Storage.
+ * Auto-crea el bucket si aún no existe.
  */
 export async function uploadTournamentCoverAction(
   formData: FormData
@@ -194,14 +195,30 @@ export async function uploadTournamentCoverAction(
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return { success: false, error: "No autorizado" }
+      return { success: false, error: "No autorizado. Inicia sesión primero." }
+    }
+
+    const adminSupabase = createAdminClient()
+
+    // 1. Asegurar que el bucket "tournaments" exista
+    try {
+      const { data: bucket } = await adminSupabase.storage.getBucket("tournaments")
+      if (!bucket) {
+        await adminSupabase.storage.createBucket("tournaments", {
+          public: true,
+          fileSizeLimit: 10485760, // 10MB
+        })
+      }
+    } catch (bucketErr) {
+      console.log("Verificando/creando bucket tournaments:", bucketErr)
     }
 
     const fileExt = file.name.split(".").pop()
     const fileName = `tournament-${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`
     const filePath = `covers/${fileName}`
 
-    const { error: uploadError } = await supabase.storage
+    // 2. Subir imagen
+    const { error: uploadError } = await adminSupabase.storage
       .from("tournaments")
       .upload(filePath, file, {
         cacheControl: "3600",
@@ -213,7 +230,7 @@ export async function uploadTournamentCoverAction(
       return { success: false, error: "Error al subir la imagen: " + uploadError.message }
     }
 
-    const { data } = supabase.storage.from("tournaments").getPublicUrl(filePath)
+    const { data } = adminSupabase.storage.from("tournaments").getPublicUrl(filePath)
 
     return { success: true, data: data.publicUrl, message: "Imagen subida correctamente" }
   } catch (err: any) {
