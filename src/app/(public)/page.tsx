@@ -4,7 +4,10 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { Trophy, Calendar, Sparkles, ArrowRight, ShieldCheck, Award } from "lucide-react"
+
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants"
+import { getUpcomingTournaments } from "@/lib/queries/tournamentQueries"
+import { TournamentCard } from "@/components/public/TournamentCard"
 import { PageLoadingSpinner } from "@/components/shared/LoadingSpinner"
 import { Button } from "@/components/ui/button"
 
@@ -122,6 +125,8 @@ async function UpcomingTournamentsSection() {
   "use cache"
   cacheLife("minutes")
 
+  const tournaments = await getUpcomingTournaments(3)
+
   return (
     <section
       className="py-20 bg-[#0B0F19] border-t border-[#2B5B84]/40"
@@ -152,23 +157,30 @@ async function UpcomingTournamentsSection() {
           </Link>
         </div>
 
-        {/* Tarjetas / Placeholder estilizado */}
-        <div className="rounded-2xl border border-[#2B5B84] bg-[#132238] p-10 text-center shadow-xl">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0B0F19] border border-[#2B5B84]">
-            <Calendar className="h-7 w-7 text-[#5FA8D3]" />
+        {tournaments.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {tournaments.map((tournament) => (
+              <TournamentCard key={tournament.id} tournament={tournament} />
+            ))}
           </div>
-          <h3 className="text-xl font-bold text-[#F0F4F8]">Próximas convocatorias en preparación</h3>
-          <p className="mt-2 text-sm text-[#94A3B8] max-w-md mx-auto">
-            Estamos programando las fechas para el siguiente torneo nacional. Mantente atento a nuestras publicaciones.
-          </p>
-          <div className="mt-6">
-            <Link href="/inscripciones">
-              <Button className="bg-[#5FA8D3] text-[#0B0F19] hover:bg-[#4A96C2] font-bold">
-                Preinscribirme
-              </Button>
-            </Link>
+        ) : (
+          <div className="rounded-2xl border border-[#2B5B84] bg-[#132238] p-10 text-center shadow-xl">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0B0F19] border border-[#2B5B84]">
+              <Calendar className="h-7 w-7 text-[#5FA8D3]" />
+            </div>
+            <h3 className="text-xl font-bold text-[#F0F4F8]">Próximas convocatorias en preparación</h3>
+            <p className="mt-2 text-sm text-[#94A3B8] max-w-md mx-auto">
+              Estamos programando las fechas para el siguiente torneo nacional. Mantente atento a nuestras publicaciones.
+            </p>
+            <div className="mt-6">
+              <Link href="/inscripciones">
+                <Button className="bg-[#5FA8D3] text-[#0B0F19] hover:bg-[#4A96C2] font-bold">
+                  Preinscribirme
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   )

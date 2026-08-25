@@ -1,8 +1,26 @@
-﻿import { createServerClient } from "@supabase/ssr"
+import { createServerClient } from "@supabase/ssr"
+import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 import { cookies } from "next/headers"
 
 /**
- * Cliente Supabase para uso en Server Components, Server Actions y Route Handlers.
+ * Cliente Supabase público (sin cookies de usuario).
+ * Ideal para Server Components cacheados ("use cache") y consultas públicas.
+ */
+export function createPublicClient() {
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    }
+  )
+}
+
+/**
+ * Cliente Supabase para uso en Server Components, Server Actions y Route Handlers autenticados.
  * Maneja automáticamente el refresh de sesión mediante cookies.
  */
 export async function createClient() {
@@ -23,7 +41,7 @@ export async function createClient() {
             })
           } catch {
             // setAll puede fallar en Server Components (read-only context).
-            // Ignorar — el middleware se encargará del refresh.
+            // Ignorar — el proxy se encargará del refresh.
           }
         },
       },
