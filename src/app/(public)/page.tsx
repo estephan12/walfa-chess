@@ -7,7 +7,9 @@ import { Trophy, Calendar, Sparkles, ArrowRight, ShieldCheck, Award } from "luci
 
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants"
 import { getUpcomingTournaments } from "@/lib/queries/tournamentQueries"
+import { getPublicNews } from "@/lib/queries/newsQueries"
 import { TournamentCard } from "@/components/public/TournamentCard"
+import { NewsCard } from "@/components/public/NewsCard"
 import { PageLoadingSpinner } from "@/components/shared/LoadingSpinner"
 import { Button } from "@/components/ui/button"
 
@@ -219,8 +221,7 @@ function StatsSection() {
 
 // Sección de Noticias Recientes
 async function RecentNewsSection() {
-  "use cache"
-  cacheLife("minutes")
+  const news = await getPublicNews(3)
 
   return (
     <section
@@ -249,19 +250,27 @@ async function RecentNewsSection() {
           </Link>
         </div>
 
-        <div className="rounded-2xl border border-[#2B5B84] bg-[#132238] p-10 text-center shadow-xl">
-          <p className="text-sm text-[#94A3B8]">
-            Las noticias y coberturas oficiales aparecerán aquí tras ser publicadas.
-          </p>
-          <div className="mt-4">
-            <Link
-              href="/noticias"
-              className="inline-block text-sm font-bold text-[#5FA8D3] hover:underline"
-            >
-              Explorar archivo de artículos →
-            </Link>
+        {news.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {news.map((item) => (
+              <NewsCard key={item.id} news={item} />
+            ))}
           </div>
-        </div>
+        ) : (
+          <div className="rounded-2xl border border-[#2B5B84] bg-[#132238] p-10 text-center shadow-xl">
+            <p className="text-sm text-[#94A3B8]">
+              Las noticias y coberturas oficiales aparecerán aquí tras ser publicadas en el panel administrativo.
+            </p>
+            <div className="mt-4">
+              <Link
+                href="/noticias"
+                className="inline-block text-sm font-bold text-[#5FA8D3] hover:underline"
+              >
+                Explorar archivo de artículos →
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )
