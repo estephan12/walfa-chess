@@ -24,7 +24,7 @@ function buildNewsPayload(data: NewsFormData, authorId?: string, isPublishing: b
     tournament_id: sanitizeString(data.tournament_id),
     meta_title: sanitizeString(data.meta_title),
     meta_description: sanitizeString(data.meta_description),
-    ...(authorId ? { author_id: authorId } : {}),
+    author_id: authorId ? authorId : null,
   }
 
   if (isPublishing && data.status === "published") {
@@ -54,9 +54,23 @@ export async function createNewsAction(
       return { success: false, error: "No autorizado. Inicia sesión para continuar." }
     }
 
-    const payload = buildNewsPayload(validated.data, user.id, true)
+    const adminSupabase = createAdminClient()
 
-    const { data, error } = await supabase
+    // Verificar si el perfil existe para evitar error de FK
+    let validAuthorId: string | undefined = undefined
+    const { data: profile } = await adminSupabase
+      .from("profiles")
+      .select("id")
+      .eq("id", user.id)
+      .maybeSingle()
+
+    if (profile?.id) {
+      validAuthorId = profile.id
+    }
+
+    const payload = buildNewsPayload(validated.data, validAuthorId, true)
+
+    const { data, error } = await adminSupabase
       .from("news")
       .insert(payload)
       .select()
@@ -104,10 +118,12 @@ export async function updateNewsAction(
       return { success: false, error: "No autorizado. Inicia sesión para continuar." }
     }
 
+    const adminSupabase = createAdminClient()
+
     // Obtener noticia actual para ver si ya tenía fecha de publicación
-    const { data: currentNews } = await supabase
+    const { data: currentNews } = await adminSupabase
       .from("news")
-      .select("published_at, status")
+      .select("published_at, status, author_id")
       .eq("id", id)
       .single()
 
@@ -115,11 +131,11 @@ export async function updateNewsAction(
       validated.data.status === "published" && (!currentNews?.published_at || currentNews.status === "draft")
 
     const payload = {
-      ...buildNewsPayload(validated.data, undefined, shouldSetPublishedAt),
+      ...buildNewsPayload(validated.data, currentNews?.author_id || undefined, shouldSetPublishedAt),
       updated_at: new Date().toISOString(),
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from("news")
       .update(payload)
       .eq("id", id)
@@ -155,7 +171,9 @@ export async function deleteNewsAction(id: string): Promise<ActionResult<void>> 
       return { success: false, error: "No autorizado" }
     }
 
-    const { error } = await supabase
+    const adminSupabase = createAdminClient()
+
+    const { error } = await adminSupabase
       .from("news")
       .delete()
       .eq("id", id)

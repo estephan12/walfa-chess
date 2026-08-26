@@ -1,4 +1,4 @@
-import { createPublicClient, createClient } from "@/lib/supabase/server"
+import { createPublicClient, createClient, createAdminClient } from "@/lib/supabase/server"
 import type { News } from "@/types"
 
 /**
@@ -11,8 +11,8 @@ export async function getPublicNews(limit?: number): Promise<News[]> {
     .from("news")
     .select(`
       *,
-      author:profiles!news_author_id_fkey(full_name, avatar_url),
-      tournament:tournaments!news_tournament_id_fkey(title, slug)
+      author:profiles(full_name, avatar_url),
+      tournament:tournaments(title, slug)
     `)
     .eq("status", "published")
     .order("published_at", { ascending: false })
@@ -41,8 +41,8 @@ export async function getFeaturedNews(limit: number = 3): Promise<News[]> {
     .from("news")
     .select(`
       *,
-      author:profiles!news_author_id_fkey(full_name, avatar_url),
-      tournament:tournaments!news_tournament_id_fkey(title, slug)
+      author:profiles(full_name, avatar_url),
+      tournament:tournaments(title, slug)
     `)
     .eq("status", "published")
     .eq("is_featured", true)
@@ -67,8 +67,8 @@ export async function getNewsBySlug(slug: string): Promise<News | null> {
     .from("news")
     .select(`
       *,
-      author:profiles!news_author_id_fkey(full_name, avatar_url),
-      tournament:tournaments!news_tournament_id_fkey(title, slug)
+      author:profiles(full_name, avatar_url),
+      tournament:tournaments(title, slug)
     `)
     .eq("slug", slug)
     .eq("status", "published")
@@ -85,9 +85,9 @@ export async function getNewsBySlug(slug: string): Promise<News | null> {
  * Obtiene una noticia por ID (para edición en panel admin)
  */
 export async function getNewsById(id: string): Promise<News | null> {
-  const supabase = await createClient()
+  const adminSupabase = createAdminClient()
 
-  const { data, error } = await supabase
+  const { data, error } = await adminSupabase
     .from("news")
     .select("*")
     .eq("id", id)
@@ -104,13 +104,13 @@ export async function getNewsById(id: string): Promise<News | null> {
  * Obtiene todas las noticias para el listado administrativo
  */
 export async function getAllNewsAdmin(): Promise<News[]> {
-  const supabase = await createClient()
+  const adminSupabase = createAdminClient()
 
-  const { data, error } = await supabase
+  const { data, error } = await adminSupabase
     .from("news")
     .select(`
       *,
-      author:profiles!news_author_id_fkey(full_name)
+      author:profiles(full_name)
     `)
     .order("created_at", { ascending: false })
 

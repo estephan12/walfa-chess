@@ -106,15 +106,21 @@ export function NewsForm({
     setIsSubmitting(true)
     setServerError(null)
 
-    const res = isEditing && initialData?.id
-      ? await updateNewsAction(initialData.id, data)
-      : await createNewsAction(data)
+    try {
+      const res = isEditing && initialData?.id
+        ? await updateNewsAction(initialData.id, data)
+        : await createNewsAction(data)
 
-    if (res.success) {
-      router.push("/admin/noticias")
-      router.refresh()
-    } else {
-      setServerError(res.error)
+      if (res?.success) {
+        router.push("/admin/noticias")
+        router.refresh()
+      } else {
+        setServerError(res?.error ?? "Error al procesar la noticia")
+        setIsSubmitting(false)
+      }
+    } catch (err: any) {
+      console.error("Error inesperado en onSubmit:", err)
+      setServerError(err?.message ?? "Error inesperado de comunicación")
       setIsSubmitting(false)
     }
   }
