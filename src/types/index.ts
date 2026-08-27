@@ -1,4 +1,4 @@
-﻿// ══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 // WALFA CHESS — Tipos de Dominio
 // ══════════════════════════════════════════════════════════════
 
@@ -39,10 +39,24 @@ export interface Profile {
 }
 
 // ── Players ───────────────────────────────────
+export type ChessTitle =
+  | 'GM'
+  | 'WGM'
+  | 'IM'
+  | 'WIM'
+  | 'FM'
+  | 'WFM'
+  | 'CM'
+  | 'WCM'
+  | 'MN'
+  | 'EN'
+
 export interface Player {
   id: string
   full_name: string
   slug: string
+  title?: ChessTitle | string | null
+  club?: string | null
   birth_date: string | null
   nationality: string
   fide_id: string | null
