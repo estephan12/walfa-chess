@@ -16,10 +16,10 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   }
 
   return (
-    <div className="flex min-h-screen bg-[#0B0F19] text-[#F0F4F8]">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-[#0B0F19] text-[#F0F4F8]">
       <AdminSidebar userEmail={user.email ?? ""} />
-      <div className="flex-1 flex flex-col min-w-0">
-        <main id="main-content" className="flex-1 p-6 lg:p-10">
+      <div className="flex-1 flex flex-col min-w-0 w-full">
+        <main id="main-content" className="flex-1 px-4 py-6 sm:px-6 lg:p-10 w-full max-w-full overflow-x-hidden min-w-0">
           {children}
         </main>
       </div>

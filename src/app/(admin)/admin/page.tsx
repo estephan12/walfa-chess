@@ -86,9 +86,9 @@ export default async function AdminDashboardPage() {
 
   return (
     <div>
-      <div className="mb-10">
-        <h1 className="text-3xl font-black text-[#F0F4F8] tracking-tight">Panel de Control</h1>
-        <p className="text-[#94A3B8] mt-1 text-sm">
+      <div className="mb-8">
+        <h1 className="text-2xl sm:text-3xl font-black text-[#F0F4F8] tracking-tight">Panel de Control</h1>
+        <p className="text-[#94A3B8] mt-1 text-xs sm:text-sm">
           Administración y gestión general de la Fundación WALFA-CHESS
         </p>
       </div>

@@ -149,12 +149,12 @@ export function NewsForm({
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Link href="/admin/noticias">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <Link href="/admin/noticias" className="flex-1 sm:flex-initial">
             <Button
               type="button"
               variant="secondary"
-              className="bg-[#132238] border border-[#2B5B84] text-[#F0F4F8] hover:bg-[#1a2d4a]"
+              className="w-full sm:w-auto bg-[#132238] border border-[#2B5B84] text-[#F0F4F8] hover:bg-[#1a2d4a]"
             >
               Cancelar
             </Button>
@@ -162,7 +162,7 @@ export function NewsForm({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="bg-[#5FA8D3] text-[#0B0F19] hover:bg-[#4A96C2] font-black shadow-md shadow-[#5FA8D3]/20"
+            className="flex-1 sm:flex-initial bg-[#5FA8D3] text-[#0B0F19] hover:bg-[#4A96C2] font-black shadow-md shadow-[#5FA8D3]/20"
           >
             {isSubmitting ? (
               <>

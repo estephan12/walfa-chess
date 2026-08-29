@@ -118,7 +118,7 @@ export function AlbumForm({
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="bg-[#5FA8D3] hover:bg-[#4A96C2] text-[#0B0F19] font-black shadow-lg shadow-[#5FA8D3]/20"
+          className="w-full sm:w-auto bg-[#5FA8D3] hover:bg-[#4A96C2] text-[#0B0F19] font-black shadow-lg shadow-[#5FA8D3]/20"
         >
           {isSubmitting ? (
             <>
