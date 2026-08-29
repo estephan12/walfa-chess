@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Trophy, Newspaper, Users, Images, Plus, Settings } from "lucide-react"
+import { Trophy, Newspaper, Users, Images, Plus, Settings, ClipboardList } from "lucide-react"
 import { connection } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 
@@ -41,14 +41,14 @@ export default async function AdminDashboardPage() {
   // Conteos paralelos
   const [
     { count: tournamentsCount },
+    { count: inscriptionsCount },
     { count: newsCount },
     { count: playersCount },
-    { count: albumsCount },
   ] = await Promise.all([
     supabase.from("tournaments").select("*", { count: "exact", head: true }),
+    supabase.from("inscriptions").select("*", { count: "exact", head: true }),
     supabase.from("news").select("*", { count: "exact", head: true }),
     supabase.from("players").select("*", { count: "exact", head: true }),
-    supabase.from("gallery_albums").select("*", { count: "exact", head: true }),
   ])
 
   const stats = [
@@ -60,11 +60,11 @@ export default async function AdminDashboardPage() {
       href: "/admin/torneos",
     },
     {
-      title: "Noticias",
-      value: newsCount ?? 0,
-      icon: Newspaper,
-      description: "Total de artículos publicados",
-      href: "/admin/noticias",
+      title: "Inscripciones",
+      value: inscriptionsCount ?? 0,
+      icon: ClipboardList,
+      description: "Participantes registrados",
+      href: "/admin/inscripciones",
     },
     {
       title: "Jugadores",
@@ -74,11 +74,11 @@ export default async function AdminDashboardPage() {
       href: "/admin/jugadores",
     },
     {
-      title: "Galería",
-      value: albumsCount ?? 0,
-      icon: Images,
-      description: "Álbumes fotográficos",
-      href: "/admin/galeria",
+      title: "Noticias",
+      value: newsCount ?? 0,
+      icon: Newspaper,
+      description: "Artículos publicados",
+      href: "/admin/noticias",
     },
   ]
 

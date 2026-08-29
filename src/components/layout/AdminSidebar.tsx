@@ -5,7 +5,7 @@ import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import {
   LayoutDashboard, Trophy, Newspaper, ListOrdered,
-  Users, Images, Handshake, Settings, LogOut, ChevronRight
+  Users, Images, Handshake, Settings, LogOut, ChevronRight, ClipboardList
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { ADMIN_NAV_LINKS, SITE_NAME } from "@/lib/constants"
@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils"
 
 const iconMap = {
   LayoutDashboard, Trophy, Newspaper, ListOrdered,
-  Users, Images, Handshake, Settings,
+  Users, Images, Handshake, Settings, ClipboardList,
 } as Record<string, React.ComponentType<{ className?: string; "aria-hidden"?: boolean }>>
 
 interface AdminSidebarProps {

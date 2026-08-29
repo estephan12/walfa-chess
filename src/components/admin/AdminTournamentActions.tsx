@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ExternalLink, Edit3, Trash2, Loader2 } from "lucide-react"
+import { ExternalLink, Edit3, Trash2, Loader2, ClipboardList } from "lucide-react"
 import { deleteTournamentAction } from "@/lib/actions/tournamentActions"
 
 interface AdminTournamentActionsProps {
@@ -41,6 +41,14 @@ export function AdminTournamentActions({
 
   return (
     <div className="flex items-center justify-end gap-2">
+      <Link
+        href={`/admin/inscripciones?torneo=${id}`}
+        className="p-1.5 rounded-lg text-[#94A3B8] hover:text-[#5FA8D3] hover:bg-[#0B0F19] transition-colors"
+        title="Ver inscripciones de este torneo"
+      >
+        <ClipboardList className="h-4 w-4" />
+      </Link>
+
       {status !== "draft" && (
         <Link
           href={`/torneos/${slug}`}

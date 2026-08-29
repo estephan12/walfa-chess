@@ -66,6 +66,7 @@ export const PUBLIC_NAV_LINKS = [
 export const ADMIN_NAV_LINKS = [
   { href: "/admin",                 label: "Dashboard",       icon: "LayoutDashboard" },
   { href: "/admin/torneos",         label: "Torneos",         icon: "Trophy" },
+  { href: "/admin/inscripciones",   label: "Inscripciones",   icon: "ClipboardList" },
   { href: "/admin/noticias",        label: "Noticias",        icon: "Newspaper" },
   { href: "/admin/resultados",      label: "Resultados",      icon: "ListOrdered" },
   { href: "/admin/jugadores",       label: "Jugadores",       icon: "Users" },
