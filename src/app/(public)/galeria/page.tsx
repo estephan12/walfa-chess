@@ -9,8 +9,8 @@ import { PageLoadingSpinner } from "@/components/shared/LoadingSpinner"
 import { formatDateShort } from "@/lib/utils"
 
 export const metadata: Metadata = {
-  title: "Galería Fotográfica Oficial — WALFA CHESS",
-  description: "Momentos destacados, premiaciones y partidas de los torneos oficiales organizados por la Fundación WALFA CHESS.",
+  title: "Galería Fotográfica Oficial — WALFA-CHESS",
+  description: "Momentos destacados, premiaciones y partidas de los torneos oficiales organizados por la Fundación WALFA-CHESS.",
 }
 
 async function AlbumsList() {

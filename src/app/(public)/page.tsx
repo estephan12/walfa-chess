@@ -48,7 +48,7 @@ function HeroSection() {
             <div className="relative h-full w-full rounded-full overflow-hidden">
               <Image
                 src="/images/logo.jpg"
-                alt="Escudo Oficial Fundación WALFA CHESS"
+                alt="Escudo Oficial Fundación WALFA-CHESS"
                 fill
                 sizes="(max-width: 640px) 128px, 160px"
                 className="object-cover scale-105"
@@ -72,7 +72,7 @@ function HeroSection() {
           className="text-4xl font-black tracking-tight text-[#F0F4F8] sm:text-6xl lg:text-7xl max-w-4xl"
         >
           Fundación de Ajedrez{" "}
-          <span className="text-[#5FA8D3] block sm:inline">WALFA CHESS</span>
+          <span className="text-[#5FA8D3] block sm:inline">WALFA-CHESS</span>
         </h1>
 
         {/* Descripción */}
@@ -148,7 +148,7 @@ async function UpcomingTournamentsSection() {
               Próximos Torneos
             </h2>
             <p className="mt-2 text-base text-[#94A3B8]">
-              Participa en los eventos oficiales organizados por WALFA CHESS.
+              Participa en los eventos oficiales organizados por WALFA-CHESS.
             </p>
           </div>
           <Link
@@ -199,7 +199,7 @@ function StatsSection() {
 
   return (
     <section className="bg-[#132238] border-y border-[#2B5B84] py-16" aria-labelledby="stats-heading">
-      <h2 id="stats-heading" className="sr-only">Estadísticas de WALFA CHESS</h2>
+      <h2 id="stats-heading" className="sr-only">Estadísticas de WALFA-CHESS</h2>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <dl className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {stats.map((stat) => (

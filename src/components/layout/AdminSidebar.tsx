@@ -10,6 +10,7 @@ import {
 import { createClient } from "@/lib/supabase/client"
 import { ADMIN_NAV_LINKS, SITE_NAME } from "@/lib/constants"
 import { cn } from "@/lib/utils"
+import { ChessKnightIcon } from "@/components/shared/ChessKnightIcon"
 
 const iconMap = {
   LayoutDashboard, Trophy, Newspaper, ListOrdered,
@@ -37,25 +38,19 @@ export function AdminSidebar({ userEmail }: AdminSidebarProps) {
       aria-label="Panel de administración"
     >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-5 py-5 border-b border-[#2B5B84]">
-        <div className="relative h-10 w-10 overflow-hidden rounded-full border border-[#2B5B84] bg-[#0B0F19] shrink-0">
-          <Image
-            src="/images/logo.jpg"
-            alt="Logo WALFA CHESS"
-            fill
-            sizes="40px"
-            className="object-cover"
-          />
+      <Link href="/admin" className="flex items-center gap-3 px-5 py-5 border-b border-[#2B5B84] hover:bg-[#0B0F19]/20 transition-colors">
+        <div className="relative h-10 w-10 rounded-xl border border-[#2B5B84] bg-[#0B0F19] flex items-center justify-center p-1.5 shrink-0">
+          <ChessKnightIcon className="h-6 w-6 text-[#5FA8D3]" />
         </div>
         <div className="flex flex-col">
           <span className="text-[10px] font-semibold tracking-wider text-[#94A3B8] uppercase">
             Admin Panel
           </span>
           <span className="font-extrabold text-sm tracking-tight text-[#F0F4F8] leading-tight">
-            WALFA <span className="text-[#5FA8D3]">★</span> CHESS
+            WALFA<span className="text-[#5FA8D3]">-</span>CHESS
           </span>
         </div>
-      </div>
+      </Link>
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 overflow-y-auto" aria-label="Menú admin">

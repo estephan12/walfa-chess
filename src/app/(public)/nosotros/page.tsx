@@ -4,7 +4,7 @@ import { Shield, Target, Award, Heart } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Nosotros",
-  description: "Conoce a la Fundación de Ajedrez WALFA CHESS — nuestra historia, misión y visión.",
+  description: "Conoce a la Fundación de Ajedrez WALFA-CHESS — nuestra historia, misión y visión.",
 }
 
 export default function NosotrosPage() {
@@ -16,7 +16,7 @@ export default function NosotrosPage() {
         <div className="relative h-36 w-36 sm:h-44 sm:w-44 overflow-hidden rounded-full border-2 border-[#2B5B84] bg-[#132238] shadow-2xl p-1 shrink-0">
           <Image
             src="/images/logo.jpg"
-            alt="Fundación WALFA CHESS"
+            alt="Fundación WALFA-CHESS"
             fill
             sizes="176px"
             className="object-cover scale-105"
@@ -27,10 +27,10 @@ export default function NosotrosPage() {
             Fundación Institucional
           </div>
           <h1 className="text-3xl sm:text-5xl font-black text-[#F0F4F8] tracking-tight">
-            Sobre WALFA CHESS
+            Sobre WALFA-CHESS
           </h1>
           <p className="mt-4 text-base sm:text-lg text-[#94A3B8] leading-relaxed">
-            La Fundación de Ajedrez WALFA CHESS es una institución comprometida con el desarrollo, profesionalización y masificación del deporte ciencia en la República Dominicana.
+            La Fundación de Ajedrez WALFA-CHESS es una institución comprometida con el desarrollo, profesionalización y masificación del deporte ciencia en la República Dominicana.
           </p>
         </div>
       </div>

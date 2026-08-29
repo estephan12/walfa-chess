@@ -3,7 +3,7 @@ import { Mail, MapPin, MessageSquare } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Contacto",
-  description: "Canales de contacto oficial de la Fundación WALFA CHESS.",
+  description: "Canales de contacto oficial de la Fundación WALFA-CHESS.",
 }
 
 export default function ContactoPage() {

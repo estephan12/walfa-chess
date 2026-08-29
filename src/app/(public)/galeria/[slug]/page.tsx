@@ -17,12 +17,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const album = await getAlbumBySlug(slug)
 
   if (!album) {
-    return { title: "Álbum no encontrado — WALFA CHESS" }
+    return { title: "Álbum no encontrado — WALFA-CHESS" }
   }
 
   return {
-    title: `${album.title} — Galería WALFA CHESS`,
-    description: album.description || `Fotografías oficiales del álbum ${album.title} de la Fundación WALFA CHESS.`,
+    title: `${album.title} — Galería WALFA-CHESS`,
+    description: album.description || `Fotografías oficiales del álbum ${album.title} de la Fundación WALFA-CHESS.`,
     openGraph: album.cover_image_url
       ? {
           images: [{ url: album.cover_image_url }],

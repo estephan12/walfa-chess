@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Mail } from "lucide-react"
 import { SITE_NAME, PUBLIC_NAV_LINKS } from "@/lib/constants"
+import { ChessKnightIcon } from "@/components/shared/ChessKnightIcon"
 
 export function Footer() {
   const [year, setYear] = useState(2026)
@@ -21,26 +22,20 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 mb-4 group">
-              <div className="relative h-12 w-12 overflow-hidden rounded-full border border-[#2B5B84] bg-[#0B0F19]">
-                <Image
-                  src="/images/logo.jpg"
-                  alt="Logo WALFA CHESS"
-                  fill
-                  sizes="48px"
-                  className="object-cover"
-                />
+              <div className="relative h-11 w-11 rounded-xl border border-[#2B5B84] bg-[#0B0F19] flex items-center justify-center p-1.5 shrink-0 group-hover:border-[#5FA8D3] transition-colors">
+                <ChessKnightIcon className="h-6 w-6 text-[#5FA8D3] transition-transform group-hover:scale-110" />
               </div>
               <div className="flex flex-col">
                 <span className="text-[10px] font-semibold tracking-wider text-[#94A3B8] uppercase">
                   Fundación de Ajedrez
                 </span>
                 <span className="text-base font-black tracking-tight text-[#F0F4F8] leading-tight">
-                  WALFA <span className="text-[#5FA8D3]">★</span> CHESS
+                  WALFA<span className="text-[#5FA8D3]">-</span>CHESS
                 </span>
               </div>
             </Link>
             <p className="text-[#94A3B8] text-sm leading-relaxed">
-              Plataforma oficial de la Fundación de Ajedrez WALFA CHESS. Impulsando el ajedrez competitivo y formativo en República Dominicana.
+              Plataforma oficial de la Fundación de Ajedrez WALFA-CHESS. Impulsando el ajedrez competitivo y formativo en República Dominicana.
             </p>
           </div>
 
@@ -108,7 +103,7 @@ export function Footer() {
             <div className="mt-5 flex items-center gap-3">
               <a
                 href="#"
-                aria-label="Instagram de WALFA CHESS"
+                aria-label="Instagram de WALFA-CHESS"
                 className="text-xs font-semibold text-[#94A3B8] hover:text-[#5FA8D3] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5FA8D3] rounded"
               >
                 Instagram
@@ -116,7 +111,7 @@ export function Footer() {
               <span className="text-[#2B5B84]" aria-hidden="true">·</span>
               <a
                 href="#"
-                aria-label="Facebook de WALFA CHESS"
+                aria-label="Facebook de WALFA-CHESS"
                 className="text-xs font-semibold text-[#94A3B8] hover:text-[#5FA8D3] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5FA8D3] rounded"
               >
                 Facebook
@@ -124,7 +119,7 @@ export function Footer() {
               <span className="text-[#2B5B84]" aria-hidden="true">·</span>
               <a
                 href="#"
-                aria-label="YouTube de WALFA CHESS"
+                aria-label="YouTube de WALFA-CHESS"
                 className="text-xs font-semibold text-[#94A3B8] hover:text-[#5FA8D3] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5FA8D3] rounded"
               >
                 YouTube

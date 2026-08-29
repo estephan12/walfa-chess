@@ -2,7 +2,7 @@
 // WALFA CHESS — Constantes del Proyecto
 // ══════════════════════════════════════════════════════════════
 
-export const SITE_NAME = "WALFA CHESS"
+export const SITE_NAME = "WALFA-CHESS"
 export const SITE_DESCRIPTION =
   "Plataforma oficial de ajedrez competitivo en República Dominicana. Torneos, clasificaciones, noticias y más."
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"

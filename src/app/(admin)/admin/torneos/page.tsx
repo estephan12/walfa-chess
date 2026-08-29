@@ -42,7 +42,7 @@ export default async function AdminTorneosPage() {
         <EmptyState
           icon={Trophy}
           title="No hay torneos registrados"
-          description="Crea el primer torneo oficial de la Fundación WALFA CHESS para comenzar a recibir inscripciones."
+          description="Crea el primer torneo oficial de la Fundación WALFA-CHESS para comenzar a recibir inscripciones."
           action={
             <Link href="/admin/torneos/nuevo">
               <Button className="bg-[#5FA8D3] text-[#0B0F19] hover:bg-[#4A96C2] font-black">

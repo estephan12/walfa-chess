@@ -9,7 +9,7 @@ import { EmptyState } from "@/components/shared/EmptyState"
 import { PageLoadingSpinner } from "@/components/shared/LoadingSpinner"
 
 export const metadata: Metadata = {
-  title: "Torneos Oficiales | Fundación WALFA CHESS",
+  title: "Torneos Oficiales | Fundación WALFA-CHESS",
   description:
     "Calendario de torneos, campeonatos nacionales y convocatorias oficiales de ajedrez en República Dominicana.",
 }
@@ -51,7 +51,7 @@ export default function TorneosPage() {
           Torneos & Competencias
         </h1>
         <p className="mt-3 text-base sm:text-lg text-[#94A3B8] max-w-3xl">
-          Explora los próximos eventos de la Fundación WALFA CHESS, consulta las bases técnicas y asegura tu inscripción online.
+          Explora los próximos eventos de la Fundación WALFA-CHESS, consulta las bases técnicas y asegura tu inscripción online.
         </p>
       </div>
 

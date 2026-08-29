@@ -7,9 +7,9 @@ import { EmptyState } from "@/components/shared/EmptyState"
 import { PageLoadingSpinner } from "@/components/shared/LoadingSpinner"
 
 export const metadata: Metadata = {
-  title: "Noticias & Cobertura — WALFA CHESS",
+  title: "Noticias & Cobertura — WALFA-CHESS",
   description:
-    "Últimas noticias, resultados, crónicas y cobertura oficial de los torneos de ajedrez organizados por WALFA CHESS.",
+    "Últimas noticias, resultados, crónicas y cobertura oficial de los torneos de ajedrez organizados por WALFA-CHESS.",
 }
 
 async function NewsList() {
@@ -20,7 +20,7 @@ async function NewsList() {
       <EmptyState
         icon={Newspaper}
         title="No hay noticias publicadas"
-        description="Próximamente publicaremos noticias sobre los torneos, premiaciones y la comunidad de ajedrez de WALFA CHESS."
+        description="Próximamente publicaremos noticias sobre los torneos, premiaciones y la comunidad de ajedrez de WALFA-CHESS."
       />
     )
   }
@@ -68,7 +68,7 @@ export default function NoticiasPage() {
           Noticias & Cobertura
         </h1>
         <p className="mt-2 text-sm sm:text-base text-[#94A3B8] max-w-2xl">
-          Actualidad, entrevistas, análisis y crónicas de los torneos de la comunidad de ajedrez WALFA CHESS.
+          Actualidad, entrevistas, análisis y crónicas de los torneos de la comunidad de ajedrez WALFA-CHESS.
         </p>
       </div>
 

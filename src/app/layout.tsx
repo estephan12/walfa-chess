@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   icons: {
-    icon: "/images/logo.jpg",
-    apple: "/images/logo.jpg",
+    icon: "/icon.svg",
+    apple: "/icon.svg",
   },
   openGraph: {
     type: "website",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
         url: "/images/logo.jpg",
         width: 800,
         height: 800,
-        alt: "Logo WALFA CHESS",
+        alt: "Logo WALFA-CHESS",
       },
     ],
   },

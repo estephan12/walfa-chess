@@ -10,9 +10,9 @@ import { StatusBadge } from "@/components/shared/StatusBadge"
 import { PageLoadingSpinner } from "@/components/shared/LoadingSpinner"
 
 export const metadata: Metadata = {
-  title: "Resultados & Tablas de Posiciones — WALFA CHESS",
+  title: "Resultados & Tablas de Posiciones — WALFA-CHESS",
   description:
-    "Resultados oficiales, podios de ganadores y tablas de posiciones de los torneos de ajedrez organizados por la Fundación WALFA CHESS.",
+    "Resultados oficiales, podios de ganadores y tablas de posiciones de los torneos de ajedrez organizados por la Fundación WALFA-CHESS.",
 }
 
 async function ResultsList() {
@@ -132,7 +132,7 @@ export default function ResultadosPage() {
           Resultados de Torneos
         </h1>
         <p className="text-base sm:text-lg text-[#94A3B8]">
-          Consulta las posiciones finales, podios y desempeño técnico de los torneos oficiales de WALFA CHESS.
+          Consulta las posiciones finales, podios y desempeño técnico de los torneos oficiales de WALFA-CHESS.
         </p>
       </div>
 

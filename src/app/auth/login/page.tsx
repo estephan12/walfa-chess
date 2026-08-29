@@ -7,6 +7,7 @@ import { Loader2, Eye, EyeOff } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner"
+import { ChessKnightIcon } from "@/components/shared/ChessKnightIcon"
 
 function LoginForm() {
   const router = useRouter()
@@ -137,23 +138,14 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo & Header */}
         <div className="text-center mb-8 flex flex-col items-center">
-          <div className="relative h-20 w-20 overflow-hidden rounded-full border-2 border-[#2B5B84] bg-[#132238] shadow-xl p-1 mb-4">
-            <div className="relative h-full w-full rounded-full overflow-hidden">
-              <Image
-                src="/images/logo.jpg"
-                alt="Logo WALFA CHESS"
-                fill
-                sizes="80px"
-                className="object-cover"
-                priority
-              />
-            </div>
+          <div className="relative h-16 w-16 rounded-2xl border border-[#2B5B84] bg-[#132238] shadow-xl flex items-center justify-center p-2 mb-4">
+            <ChessKnightIcon className="h-10 w-10 text-[#5FA8D3]" />
           </div>
           <span className="text-xs font-bold text-[#5FA8D3] uppercase tracking-widest mb-1">
             Fundación de Ajedrez
           </span>
           <h1 className="text-2xl font-black text-[#F0F4F8] tracking-tight">
-            WALFA <span className="text-[#5FA8D3]">★</span> CHESS
+            WALFA<span className="text-[#5FA8D3]">-</span>CHESS
           </h1>
           <p className="text-[#94A3B8] text-xs mt-1">Panel de Administración</p>
         </div>

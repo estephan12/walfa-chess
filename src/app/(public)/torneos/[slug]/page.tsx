@@ -40,11 +40,11 @@ export async function generateMetadata({ params }: TorneoPageProps): Promise<Met
   const tournament = await getTournamentBySlug(slug)
 
   if (!tournament) {
-    return { title: "Torneo no encontrado | WALFA CHESS" }
+    return { title: "Torneo no encontrado | WALFA-CHESS" }
   }
 
   return {
-    title: `${tournament.title} | Torneo Oficial WALFA CHESS`,
+    title: `${tournament.title} | Torneo Oficial WALFA-CHESS`,
     description:
       tournament.description ??
       `Bases, horarios, premios e inscripción para ${tournament.title}.`,

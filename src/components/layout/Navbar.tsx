@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react"
 import { PUBLIC_NAV_LINKS, SITE_NAME } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { ChessKnightIcon } from "@/components/shared/ChessKnightIcon"
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -23,22 +24,15 @@ export function Navbar() {
           className="flex items-center gap-3 font-bold group transition-transform hover:scale-[1.02]"
           aria-label={`${SITE_NAME} — Inicio`}
         >
-          <div className="relative h-12 w-12 overflow-hidden rounded-full border border-[#2B5B84] bg-[#0B0F19] shadow-md shadow-black/40">
-            <Image
-              src="/images/logo.jpg"
-              alt="Logo WALFA CHESS"
-              fill
-              sizes="48px"
-              className="object-cover"
-              priority
-            />
+          <div className="relative h-11 w-11 rounded-xl border border-[#2B5B84] bg-[#0B0F19] shadow-md shadow-black/40 flex items-center justify-center p-1.5 group-hover:border-[#5FA8D3] transition-colors shrink-0">
+            <ChessKnightIcon className="h-7 w-7 text-[#5FA8D3] transition-transform group-hover:scale-110" />
           </div>
           <div className="flex flex-col">
             <span className="text-xs font-semibold tracking-wider text-[#94A3B8] uppercase">
               Fundación de Ajedrez
             </span>
             <span className="text-lg font-black tracking-tight text-[#F0F4F8] leading-none">
-              WALFA <span className="text-[#5FA8D3]">★</span> CHESS
+              WALFA<span className="text-[#5FA8D3]">-</span>CHESS
             </span>
           </div>
         </Link>

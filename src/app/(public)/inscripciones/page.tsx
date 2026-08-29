@@ -7,7 +7,7 @@ import { PageLoadingSpinner } from "@/components/shared/LoadingSpinner"
 
 export const metadata: Metadata = {
   title: "Inscripciones a Torneos",
-  description: "Formulario oficial de inscripción para los torneos y competencias de la Fundación WALFA CHESS.",
+  description: "Formulario oficial de inscripción para los torneos y competencias de la Fundación WALFA-CHESS.",
 }
 
 export const instant = false
@@ -36,7 +36,7 @@ export default function InscripcionesPage({ searchParams }: InscripcionesPagePro
           Inscripción a Torneos
         </h1>
         <p className="mt-3 text-base sm:text-lg text-[#94A3B8] max-w-2xl mx-auto">
-          Completa el formulario oficial para reservar tu cupo en los torneos y competencias de la Fundación WALFA CHESS.
+          Completa el formulario oficial para reservar tu cupo en los torneos y competencias de la Fundación WALFA-CHESS.
         </p>
       </div>
 

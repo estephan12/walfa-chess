@@ -6,9 +6,9 @@ import { RankingTable } from "@/components/public/RankingTable"
 import { PageLoadingSpinner } from "@/components/shared/LoadingSpinner"
 
 export const metadata: Metadata = {
-  title: "Clasificación & Ranking Oficial — WALFA CHESS",
+  title: "Clasificación & Ranking Oficial — WALFA-CHESS",
   description:
-    "Tabla de posiciones, ranking y rendimiento oficial de los ajedrecistas federados y locales de la Fundación WALFA CHESS.",
+    "Tabla de posiciones, ranking y rendimiento oficial de los ajedrecistas federados y locales de la Fundación WALFA-CHESS.",
 }
 
 async function RankingContent() {
@@ -93,7 +93,7 @@ export default function ClasificacionPage() {
           Clasificación & Ranking
         </h1>
         <p className="text-base sm:text-lg text-[#94A3B8]">
-          Rendimiento y puntuaciones Elo (FIDE y Nacional) de los ajedrecistas registrados en la Fundación WALFA CHESS.
+          Rendimiento y puntuaciones Elo (FIDE y Nacional) de los ajedrecistas registrados en la Fundación WALFA-CHESS.
         </p>
       </div>
 

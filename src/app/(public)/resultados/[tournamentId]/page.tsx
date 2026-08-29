@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!data) return { title: "Resultados de Torneo" }
 
   return {
-    title: `Resultados Oficiales: ${data.tournament.title} — WALFA CHESS`,
+    title: `Resultados Oficiales: ${data.tournament.title} — WALFA-CHESS`,
     description: `Tabla de posiciones, campeones y cuadro de honor del torneo ${data.tournament.title}.`,
   }
 }

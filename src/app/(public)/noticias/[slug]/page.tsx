@@ -19,11 +19,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const news = await getNewsBySlug(slug)
 
   if (!news) {
-    return { title: "Noticia no encontrada — WALFA CHESS" }
+    return { title: "Noticia no encontrada — WALFA-CHESS" }
   }
 
   return {
-    title: news.meta_title || `${news.title} — WALFA CHESS`,
+    title: news.meta_title || `${news.title} — WALFA-CHESS`,
     description: news.meta_description || news.excerpt || undefined,
     openGraph: {
       title: news.meta_title || news.title,
@@ -137,7 +137,7 @@ export default async function NoticiaDetallePage({ params }: Props) {
           <div>
             <p className="text-xs text-[#94A3B8]">Publicado por</p>
             <p className="text-sm font-bold text-[#F0F4F8]">
-              {news.author?.full_name || "Equipo WALFA CHESS"}
+              {news.author?.full_name || "Equipo WALFA-CHESS"}
             </p>
           </div>
         </div>
