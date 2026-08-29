@@ -139,7 +139,7 @@ export default function LoginPage() {
         {/* Logo & Header */}
         <div className="text-center mb-8 flex flex-col items-center">
           <div className="relative h-16 w-16 rounded-2xl border border-[#2B5B84] bg-[#132238] shadow-xl flex items-center justify-center p-2 mb-4">
-            <ChessKnightIcon className="h-10 w-10 text-[#5FA8D3]" />
+            <ChessKnightIcon className="h-11 w-auto text-[#5FA8D3]" />
           </div>
           <span className="text-xs font-bold text-[#5FA8D3] uppercase tracking-widest mb-1">
             Fundación de Ajedrez

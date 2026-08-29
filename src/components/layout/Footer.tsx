@@ -23,7 +23,7 @@ export function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 mb-4 group">
               <div className="relative h-11 w-11 rounded-xl border border-[#2B5B84] bg-[#0B0F19] flex items-center justify-center p-1.5 shrink-0 group-hover:border-[#5FA8D3] transition-colors">
-                <ChessKnightIcon className="h-6 w-6 text-[#5FA8D3] transition-transform group-hover:scale-110" />
+                <ChessKnightIcon className="h-7 w-auto text-[#5FA8D3] transition-transform group-hover:scale-110" />
               </div>
               <div className="flex flex-col">
                 <span className="text-[10px] font-semibold tracking-wider text-[#94A3B8] uppercase">

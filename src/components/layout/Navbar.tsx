@@ -25,7 +25,7 @@ export function Navbar() {
           aria-label={`${SITE_NAME} — Inicio`}
         >
           <div className="relative h-11 w-11 rounded-xl border border-[#2B5B84] bg-[#0B0F19] shadow-md shadow-black/40 flex items-center justify-center p-1.5 group-hover:border-[#5FA8D3] transition-colors shrink-0">
-            <ChessKnightIcon className="h-7 w-7 text-[#5FA8D3] transition-transform group-hover:scale-110" />
+            <ChessKnightIcon className="h-8 w-auto text-[#5FA8D3] transition-transform group-hover:scale-110" />
           </div>
           <div className="flex flex-col">
             <span className="text-xs font-semibold tracking-wider text-[#94A3B8] uppercase">
