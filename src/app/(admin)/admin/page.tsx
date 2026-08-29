@@ -44,11 +44,13 @@ export default async function AdminDashboardPage() {
     { count: inscriptionsCount },
     { count: newsCount },
     { count: playersCount },
+    { count: albumsCount },
   ] = await Promise.all([
     supabase.from("tournaments").select("*", { count: "exact", head: true }),
     supabase.from("inscriptions").select("*", { count: "exact", head: true }),
     supabase.from("news").select("*", { count: "exact", head: true }),
     supabase.from("players").select("*", { count: "exact", head: true }),
+    supabase.from("gallery_albums").select("*", { count: "exact", head: true }),
   ])
 
   const stats = [
@@ -74,11 +76,11 @@ export default async function AdminDashboardPage() {
       href: "/admin/jugadores",
     },
     {
-      title: "Noticias",
-      value: newsCount ?? 0,
-      icon: Newspaper,
-      description: "Artículos publicados",
-      href: "/admin/noticias",
+      title: "Álbumes Galería",
+      value: albumsCount ?? 0,
+      icon: Images,
+      description: "Álbumes y coberturas fotográficas",
+      href: "/admin/galeria",
     },
   ]
 

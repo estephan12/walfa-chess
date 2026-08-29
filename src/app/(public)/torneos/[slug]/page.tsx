@@ -15,9 +15,11 @@ import {
   ShieldCheck,
   CheckCircle2,
   FileText,
+  Images,
 } from "lucide-react"
 
 import { getTournamentBySlug } from "@/lib/queries/tournamentQueries"
+import { getAlbumByTournamentId } from "@/lib/queries/galleryQueries"
 import { StatusBadge } from "@/components/shared/StatusBadge"
 import { Button } from "@/components/ui/button"
 import {
@@ -61,6 +63,8 @@ export default async function TorneoPage({ params }: TorneoPageProps) {
   if (!tournament) {
     notFound()
   }
+
+  const album = await getAlbumByTournamentId(tournament.id)
 
   const isRegistrationOpen =
     tournament.status === "published" && tournament.inscription_type !== "closed"
@@ -314,6 +318,49 @@ export default async function TorneoPage({ params }: TorneoPageProps) {
               )}
 
             </div>
+
+            {/* Tarjeta de Álbum Fotográfico Oficial si existe */}
+            {album && (
+              <div className="p-6 rounded-3xl border border-[#2B5B84] bg-[#132238] shadow-xl space-y-3">
+                <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#5FA8D3] uppercase tracking-wider">
+                  <Images className="h-4 w-4" /> Cobertura Multimedia
+                </div>
+                <h3 className="text-sm font-bold text-[#F0F4F8]">
+                  {album.title}
+                </h3>
+                <p className="text-xs text-[#94A3B8]">
+                  {album.image_count} fotografías oficiales disponibles en alta resolución.
+                </p>
+                <Link href={`/galeria/${album.slug}`} className="block pt-1">
+                  <Button
+                    variant="secondary"
+                    className="w-full bg-[#0B0F19] border border-[#2B5B84] text-[#5FA8D3] hover:border-[#5FA8D3] hover:bg-[#1a2d4a] font-bold text-xs"
+                  >
+                    Ver Fotos Oficiales →
+                  </Button>
+                </Link>
+              </div>
+            )}
+
+            {/* Tarjeta de Resultados si el torneo ya inició o finalizó */}
+            {(tournament.status === "finished" || tournament.status === "ongoing") && (
+              <div className="p-6 rounded-3xl border border-[#2B5B84] bg-[#132238] shadow-xl space-y-3">
+                <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#5FA8D3] uppercase tracking-wider">
+                  <Trophy className="h-4 w-4" /> Posiciones Oficiales
+                </div>
+                <p className="text-xs text-[#94A3B8]">
+                  Consulta el podio de ganadores, clasificación por categorías y desempates técnicos.
+                </p>
+                <Link href={`/resultados/${tournament.id}`} className="block pt-1">
+                  <Button
+                    variant="secondary"
+                    className="w-full bg-[#0B0F19] border border-[#2B5B84] text-[#5FA8D3] hover:border-[#5FA8D3] hover:bg-[#1a2d4a] font-bold text-xs"
+                  >
+                    Ver Resultados & Podio →
+                  </Button>
+                </Link>
+              </div>
+            )}
 
           </div>
 
