@@ -6,6 +6,8 @@ import { getAlbumBySlug } from "@/lib/queries/galleryQueries"
 import { GalleryLightbox } from "@/components/public/GalleryLightbox"
 import { formatDateShort } from "@/lib/utils"
 
+export const instant = false
+
 interface Props {
   params: Promise<{ slug: string }>
 }

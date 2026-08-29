@@ -6,6 +6,8 @@ import { getAllTournamentsAdmin } from "@/lib/queries/tournamentQueries"
 import { AlbumForm } from "@/components/admin/AlbumForm"
 import { AlbumPhotoManager } from "@/components/admin/AlbumPhotoManager"
 
+export const instant = false
+
 interface Props {
   params: Promise<{ id: string }>
 }
