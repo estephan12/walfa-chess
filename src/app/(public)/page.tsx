@@ -10,6 +10,7 @@ import { getUpcomingTournaments } from "@/lib/queries/tournamentQueries"
 import { getPublicNews } from "@/lib/queries/newsQueries"
 import { TournamentCard } from "@/components/public/TournamentCard"
 import { NewsCard } from "@/components/public/NewsCard"
+import { SponsorsSection } from "@/components/public/SponsorsSection"
 import { PageLoadingSpinner } from "@/components/shared/LoadingSpinner"
 import { Button } from "@/components/ui/button"
 
@@ -286,6 +287,9 @@ export default function HomePage() {
       <StatsSection />
       <Suspense fallback={<PageLoadingSpinner />}>
         <RecentNewsSection />
+      </Suspense>
+      <Suspense fallback={<PageLoadingSpinner />}>
+        <SponsorsSection />
       </Suspense>
     </>
   )
