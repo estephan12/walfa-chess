@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { cacheLife } from "next/cache"
 import { Suspense } from "react"
-import { Trophy, Calendar } from "lucide-react"
+import { Trophy } from "lucide-react"
 
 import { getPublicTournaments } from "@/lib/queries/tournamentQueries"
 import { TournamentCard } from "@/components/public/TournamentCard"
@@ -44,13 +44,13 @@ export default function TorneosPage() {
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
       {/* Encabezado */}
       <div className="mb-12">
-        <div className="inline-flex items-center gap-2 rounded-full border border-[#2B5B84] bg-[#132238] px-3.5 py-1 text-xs font-bold text-[#5FA8D3] uppercase tracking-wider mb-3">
+        <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1 text-xs font-bold text-[#1D64F2] uppercase tracking-wider mb-3">
           <Trophy className="h-3.5 w-3.5" /> Calendario Oficial
         </div>
-        <h1 className="text-3xl sm:text-5xl font-black text-[#F0F4F8] tracking-tight">
+        <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
           Torneos & Competencias
         </h1>
-        <p className="mt-3 text-base sm:text-lg text-[#94A3B8] max-w-3xl">
+        <p className="mt-3 text-base sm:text-lg text-slate-600 max-w-3xl leading-relaxed">
           Explora los próximos eventos de la Fundación WALFA-CHESS, consulta las bases técnicas y asegura tu inscripción online.
         </p>
       </div>

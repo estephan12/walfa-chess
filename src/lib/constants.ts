@@ -23,15 +23,15 @@ export const STORAGE_BUCKETS = {
 // Colores de estado para badges
 export const STATUS_COLORS = {
   // Torneos
-  draft:      "bg-[#132238] border border-[#2B5B84] text-[#94A3B8]",
-  published:  "bg-[#132238] border border-[#5FA8D3] text-[#5FA8D3]",
-  ongoing:    "bg-emerald-950/60 border border-emerald-500/40 text-emerald-400",
-  finished:   "bg-indigo-950/60 border border-indigo-500/40 text-indigo-300",
-  cancelled:  "bg-rose-950/60 border border-rose-500/40 text-rose-300",
+  draft:      "bg-slate-100 border border-slate-200 text-slate-700",
+  published:  "bg-blue-50 border border-blue-200 text-[#1D64F2]",
+  ongoing:    "bg-emerald-50 border border-emerald-300 text-emerald-700",
+  finished:   "bg-indigo-50 border border-indigo-200 text-indigo-700",
+  cancelled:  "bg-rose-50 border border-rose-200 text-rose-700",
   // Inscripciones
-  pending:    "bg-amber-950/60 border border-amber-500/40 text-amber-300",
-  confirmed:  "bg-emerald-950/60 border border-emerald-500/40 text-emerald-400",
-  rejected:   "bg-rose-950/60 border border-rose-500/40 text-rose-300",
+  pending:    "bg-amber-50 border border-amber-300 text-amber-800",
+  confirmed:  "bg-emerald-50 border border-emerald-300 text-emerald-700",
+  rejected:   "bg-rose-50 border border-rose-200 text-rose-700",
 } as const
 
 // Niveles de patrocinadores (orden de display)

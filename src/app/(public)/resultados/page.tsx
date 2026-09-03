@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
 import { Suspense } from "react"
-import { Trophy, Calendar, MapPin, Award, ArrowRight, ListOrdered, Sparkles, User } from "lucide-react"
+import { Trophy, Calendar, MapPin, ArrowRight, ListOrdered, Sparkles } from "lucide-react"
 import { getPublicTournamentsWithResults } from "@/lib/queries/resultQueries"
 import { formatDateShort } from "@/lib/utils"
 import { EmptyState } from "@/components/shared/EmptyState"
@@ -33,19 +33,19 @@ async function ResultsList() {
       {tournaments.map((t) => (
         <div
           key={t.id}
-          className="bg-[#132238] border border-[#2B5B84] rounded-3xl overflow-hidden shadow-xl flex flex-col justify-between hover:border-[#5FA8D3]/60 transition-all group"
+          className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between hover:shadow-md hover:border-[#1D64F2]/40 transition-all group"
         >
           <div>
             {/* Imagen de portada si existe */}
             {t.cover_image_url ? (
-              <div className="relative h-44 w-full bg-[#0B0F19] overflow-hidden border-b border-[#2B5B84]">
+              <div className="relative h-44 w-full bg-slate-900 overflow-hidden border-b border-slate-200">
                 <Image
                   src={t.cover_image_url}
                   alt={t.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#132238] via-transparent to-black/40" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
                 <div className="absolute top-3 left-3">
                   <StatusBadge status={t.status} />
                 </div>
@@ -57,45 +57,45 @@ async function ResultsList() {
             )}
 
             <div className="p-6 space-y-4">
-              <div className="flex items-center gap-2 text-xs text-[#94A3B8] font-mono">
-                <Calendar className="h-3.5 w-3.5 text-[#5FA8D3]" />
+              <div className="flex items-center gap-2 text-xs text-slate-500 font-mono">
+                <Calendar className="h-3.5 w-3.5 text-[#1D64F2]" />
                 {formatDateShort(t.start_date)}
                 {t.location && (
                   <>
                     <span>•</span>
                     <span className="truncate flex items-center gap-1">
-                      <MapPin className="h-3 w-3 text-[#5FA8D3]" />
+                      <MapPin className="h-3 w-3 text-[#1D64F2]" />
                       {t.location}
                     </span>
                   </>
                 )}
               </div>
 
-              <h2 className="text-xl font-black text-[#F0F4F8] group-hover:text-[#5FA8D3] transition-colors line-clamp-2">
+              <h2 className="text-xl font-bold text-slate-900 group-hover:text-[#1D64F2] transition-colors line-clamp-2">
                 <Link href={`/resultados/${t.id}`}>
                   {t.title}
                 </Link>
               </h2>
 
               {/* Campeón / Cuadro de Honor Preview */}
-              <div className="p-4 rounded-2xl bg-[#0B0F19]/70 border border-[#2B5B84]/50 space-y-2">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
                 {t.winner ? (
                   <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 flex items-center gap-1">
                       <Trophy className="h-3.5 w-3.5" /> Campeón Oficial
                     </span>
-                    <p className="font-bold text-base text-[#F0F4F8] mt-0.5 truncate">
+                    <p className="font-bold text-base text-slate-900 mt-0.5 truncate">
                       {t.winner.player_name}
                     </p>
                     {t.winner.points !== null && (
-                      <p className="text-xs text-[#94A3B8]">
-                        Puntuación: <strong className="text-amber-300 font-mono">{t.winner.points} pts</strong>
+                      <p className="text-xs text-slate-600">
+                        Puntuación: <strong className="text-amber-700 font-mono">{t.winner.points} pts</strong>
                         {t.winner.prize_won ? ` • ${t.winner.prize_won}` : ""}
                       </p>
                     )}
                   </div>
                 ) : (
-                  <p className="text-xs italic text-[#94A3B8]/60">
+                  <p className="text-xs italic text-slate-500">
                     Posiciones en proceso de homologación
                   </p>
                 )}
@@ -106,7 +106,7 @@ async function ResultsList() {
           <div className="p-6 pt-0">
             <Link
               href={`/resultados/${t.id}`}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#5FA8D3] hover:bg-[#4A96C2] text-[#0B0F19] text-xs font-black shadow-lg shadow-[#5FA8D3]/20 transition-all cursor-pointer"
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#1D64F2] hover:bg-[#1554cf] text-white text-xs font-bold shadow-sm transition-all cursor-pointer"
             >
               <Trophy className="h-4 w-4" />
               <span>Ver Tabla de Posiciones</span>
@@ -124,14 +124,14 @@ export default function ResultadosPage() {
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-10">
       {/* HEADER DE LA PÁGINA */}
       <div className="text-center max-w-3xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#5FA8D3]/10 border border-[#5FA8D3]/30 text-xs font-bold text-[#5FA8D3] uppercase tracking-wider">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-[#1D64F2] uppercase tracking-wider">
           <Sparkles className="h-3.5 w-3.5" />
           Clasificaciones & Cuadros de Honor
         </div>
-        <h1 className="text-3xl sm:text-5xl font-black text-[#F0F4F8] tracking-tight">
+        <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
           Resultados de Torneos
         </h1>
-        <p className="text-base sm:text-lg text-[#94A3B8]">
+        <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
           Consulta las posiciones finales, podios y desempeño técnico de los torneos oficiales de WALFA-CHESS.
         </p>
       </div>

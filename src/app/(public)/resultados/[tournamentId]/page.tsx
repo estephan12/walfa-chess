@@ -3,15 +3,11 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import {
-  Trophy,
   Calendar,
   MapPin,
   Clock,
   ArrowLeft,
   ExternalLink,
-  Shield,
-  Layers,
-  Award,
 } from "lucide-react"
 import { getTournamentResultsFull } from "@/lib/queries/resultQueries"
 import { TournamentResultsView } from "@/components/public/TournamentResultsView"
@@ -51,7 +47,7 @@ export default async function ResultadosTorneoPage({ params }: Props) {
       <div className="flex items-center justify-between">
         <Link
           href="/resultados"
-          className="inline-flex items-center gap-2 text-xs font-bold text-[#94A3B8] hover:text-[#5FA8D3] transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-bold text-[#1D64F2] hover:text-[#1554cf] transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Volver a Todos los Resultados
@@ -59,7 +55,7 @@ export default async function ResultadosTorneoPage({ params }: Props) {
 
         <Link
           href={`/torneos/${tournament.slug}`}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#132238] border border-[#2B5B84] text-xs font-bold text-[#5FA8D3] hover:bg-[#0B0F19] transition-colors"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 hover:text-[#1D64F2] hover:border-[#1D64F2] transition-colors"
         >
           <span>Ver Ficha Técnica del Torneo</span>
           <ExternalLink className="h-3.5 w-3.5" />
@@ -67,9 +63,9 @@ export default async function ResultadosTorneoPage({ params }: Props) {
       </div>
 
       {/* CABECERA DEL TORNEO */}
-      <div className="relative rounded-3xl bg-[#132238] border border-[#2B5B84] p-6 sm:p-10 shadow-2xl overflow-hidden">
+      <div className="relative rounded-2xl bg-white border border-slate-200 p-6 sm:p-10 shadow-sm overflow-hidden">
         {tournament.cover_image_url && (
-          <div className="absolute inset-0 opacity-10 blur-xl pointer-events-none">
+          <div className="absolute inset-0 opacity-5 blur-xl pointer-events-none">
             <Image
               src={tournament.cover_image_url}
               alt=""
@@ -82,66 +78,66 @@ export default async function ResultadosTorneoPage({ params }: Props) {
         <div className="relative z-10 space-y-4">
           <div className="flex items-center gap-2 flex-wrap">
             <StatusBadge status={tournament.status} />
-            <span className="text-xs text-[#94A3B8] font-mono flex items-center gap-1">
-              <Calendar className="h-3.5 w-3.5 text-[#5FA8D3]" />
+            <span className="text-xs text-slate-500 font-mono flex items-center gap-1">
+              <Calendar className="h-3.5 w-3.5 text-[#1D64F2]" />
               {formatDateShort(tournament.start_date)}
               {tournament.end_date && ` - ${formatDateShort(tournament.end_date)}`}
             </span>
             {tournament.location && (
-              <span className="text-xs text-[#94A3B8] flex items-center gap-1">
-                <MapPin className="h-3.5 w-3.5 text-[#5FA8D3]" />
+              <span className="text-xs text-slate-500 flex items-center gap-1">
+                <MapPin className="h-3.5 w-3.5 text-[#1D64F2]" />
                 {tournament.location}
               </span>
             )}
             {tournament.time_control && (
-              <span className="text-xs text-[#94A3B8] flex items-center gap-1">
-                <Clock className="h-3.5 w-3.5 text-[#5FA8D3]" />
+              <span className="text-xs text-slate-500 flex items-center gap-1">
+                <Clock className="h-3.5 w-3.5 text-[#1D64F2]" />
                 {tournament.time_control}
               </span>
             )}
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#F0F4F8] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
             {tournament.title}
           </h1>
 
           {tournament.description && (
-            <p className="text-sm sm:text-base text-[#94A3B8] max-w-3xl">
+            <p className="text-sm sm:text-base text-slate-600 max-w-3xl leading-relaxed">
               {tournament.description}
             </p>
           )}
 
           {/* DATOS RÁPIDOS */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-[#2B5B84]/40">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-slate-100">
             <div>
-              <span className="text-[10px] uppercase font-bold text-[#94A3B8] tracking-wider block">
+              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
                 Total Participantes
               </span>
-              <span className="text-lg font-black text-[#F0F4F8] font-mono">
+              <span className="text-lg font-black text-slate-900 font-mono">
                 {results.length}
               </span>
             </div>
             <div>
-              <span className="text-[10px] uppercase font-bold text-[#94A3B8] tracking-wider block">
+              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
                 Categorías
               </span>
-              <span className="text-lg font-black text-[#5FA8D3] font-mono">
+              <span className="text-lg font-black text-[#1D64F2] font-mono">
                 {categories.length > 0 ? categories.length : "General"}
               </span>
             </div>
             <div>
-              <span className="text-[10px] uppercase font-bold text-[#94A3B8] tracking-wider block">
+              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
                 Bolsa de Premios
               </span>
-              <span className="text-lg font-black text-amber-400 font-mono">
+              <span className="text-lg font-black text-amber-600 font-mono">
                 {tournament.prize_pool || "Trofeos & Medallas"}
               </span>
             </div>
             <div>
-              <span className="text-[10px] uppercase font-bold text-[#94A3B8] tracking-wider block">
+              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
                 Ritmo de Juego
               </span>
-              <span className="text-lg font-black text-emerald-400 font-mono">
+              <span className="text-lg font-black text-emerald-600 font-mono">
                 {tournament.time_control || "Clásico"}
               </span>
             </div>

@@ -28,14 +28,14 @@ export default function InscripcionesPage({ searchParams }: InscripcionesPagePro
     <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16">
       {/* Header */}
       <div className="text-center mb-12">
-        <div className="inline-flex items-center gap-2 rounded-full border border-[#2B5B84] bg-[#132238] px-4 py-1 text-xs font-bold text-[#5FA8D3] uppercase tracking-wider mb-3">
+        <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-1 text-xs font-bold text-[#1D64F2] uppercase tracking-wider mb-3">
           <Trophy className="h-3.5 w-3.5" />
           Registro Oficial
         </div>
-        <h1 className="text-3xl sm:text-5xl font-black text-[#F0F4F8] tracking-tight">
+        <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
           Inscripción a Torneos
         </h1>
-        <p className="mt-3 text-base sm:text-lg text-[#94A3B8] max-w-2xl mx-auto">
+        <p className="mt-3 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
           Completa el formulario oficial para reservar tu cupo en los torneos y competencias de la Fundación WALFA-CHESS.
         </p>
       </div>
@@ -48,34 +48,34 @@ export default function InscripcionesPage({ searchParams }: InscripcionesPagePro
       </div>
 
       {/* Guía informativa / Preguntas frecuentes */}
-      <div className="rounded-3xl border border-[#2B5B84] bg-[#132238] p-8 shadow-xl">
-        <h2 className="text-base font-bold text-[#F0F4F8] uppercase tracking-wider mb-6 flex items-center gap-2">
-          <Clock className="h-4 w-4 text-[#5FA8D3]" />
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+        <h2 className="text-base font-bold text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
+          <Clock className="h-4 w-4 text-[#1D64F2]" />
           Información Importante para Participantes
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-xs text-[#94A3B8]">
-          <div className="p-4 rounded-2xl bg-[#0B0F19]/60 border border-[#2B5B84]/40 space-y-2">
-            <p className="font-bold text-[#F0F4F8] text-sm flex items-center gap-1.5">
-              <CheckCircle className="h-4 w-4 text-[#5FA8D3]" /> 1. Validación
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-xs text-slate-600">
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <p className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+              <CheckCircle className="h-4 w-4 text-[#1D64F2]" /> 1. Validación
             </p>
             <p>
               Toda solicitud pasa por una revisión técnica del comité organizador para validar la categoría según tu Elo.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0B0F19]/60 border border-[#2B5B84]/40 space-y-2">
-            <p className="font-bold text-[#F0F4F8] text-sm flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-[#5FA8D3]" /> 2. Confirmación
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <p className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+              <Clock className="h-4 w-4 text-[#1D64F2]" /> 2. Confirmación
             </p>
             <p>
               Recibirás un mensaje de WhatsApp o correo confirmando tu número de partida y mesa asignada previo a la primera ronda.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0B0F19]/60 border border-[#2B5B84]/40 space-y-2">
-            <p className="font-bold text-[#F0F4F8] text-sm flex items-center gap-1.5">
-              <ShieldAlert className="h-4 w-4 text-[#5FA8D3]" /> 3. Puntualidad
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <p className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+              <ShieldAlert className="h-4 w-4 text-[#1D64F2]" /> 3. Puntualidad
             </p>
             <p>
               El día inaugural deberás presentar tu documento de identidad con 30 minutos de antelación al inicio de la ronda 1.
