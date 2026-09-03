@@ -17,6 +17,7 @@ import {
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants"
 import { getUpcomingTournaments } from "@/lib/queries/tournamentQueries"
 import { getPublicNews } from "@/lib/queries/newsQueries"
+import { getStatsRibbonConfig } from "@/lib/queries/settingsQueries"
 import { TournamentCard } from "@/components/public/TournamentCard"
 import { NewsCard } from "@/components/public/NewsCard"
 import { PageLoadingSpinner } from "@/components/shared/LoadingSpinner"
@@ -243,39 +244,25 @@ async function TournamentsAndNewsSection() {
 }
 
 // ─── 3. Cinta de Estadísticas (Full-width Stats Bar) ───
-function StatsRibbon() {
-  const stats = [
-    {
-      icon: Users,
-      value: "+1,200",
-      label: "Jugadores Formados",
-    },
-    {
-      icon: Trophy,
-      value: "+80",
-      label: "Torneos Realizados",
-    },
-    {
-      icon: Award,
-      value: "+150",
-      label: "Campeones Destacados",
-    },
-    {
-      icon: Globe,
-      value: "+15",
-      label: "Provincias Alcanzadas",
-    },
-  ]
+const ICONS_MAP: Record<string, any> = {
+  users: Users,
+  trophy: Trophy,
+  award: Award,
+  globe: Globe,
+}
+
+async function StatsRibbon() {
+  const { displayStats } = await getStatsRibbonConfig()
 
   return (
     <section className="bg-[#081830] text-white py-10 border-y border-slate-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-          {stats.map((stat) => {
-            const Icon = stat.icon
+          {displayStats.map((stat, index) => {
+            const Icon = ICONS_MAP[stat.icon] || Users
             return (
               <div
-                key={stat.label}
+                key={index}
                 className="flex items-center justify-center gap-3 sm:gap-4 text-left"
               >
                 <div className="text-white opacity-80 shrink-0">
@@ -406,7 +393,9 @@ export default function HomePage() {
       <Suspense fallback={<PageLoadingSpinner />}>
         <TournamentsAndNewsSection />
       </Suspense>
-      <StatsRibbon />
+      <Suspense fallback={<div className="h-24 bg-[#081830]" />}>
+        <StatsRibbon />
+      </Suspense>
       <FeaturedGallerySection />
       <SponsorsRowSection />
     </>
