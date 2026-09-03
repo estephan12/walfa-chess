@@ -9,6 +9,7 @@ import {
   ArrowLeft,
   ExternalLink,
 } from "lucide-react"
+import { cacheLife } from "next/cache"
 import { getTournamentResultsFull } from "@/lib/queries/resultQueries"
 import { TournamentResultsView } from "@/components/public/TournamentResultsView"
 import { StatusBadge } from "@/components/shared/StatusBadge"

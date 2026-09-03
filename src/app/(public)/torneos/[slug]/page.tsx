@@ -20,6 +20,7 @@ import { getTournamentBySlug } from "@/lib/queries/tournamentQueries"
 import { getAlbumByTournamentId } from "@/lib/queries/galleryQueries"
 import { StatusBadge } from "@/components/shared/StatusBadge"
 import { Button } from "@/components/ui/button"
+import { cacheLife } from "next/cache"
 import {
   formatDate,
   formatDateRange,

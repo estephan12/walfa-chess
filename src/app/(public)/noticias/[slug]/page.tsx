@@ -3,7 +3,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Calendar, User, ArrowLeft, Trophy } from "lucide-react"
-import DOMPurify from "isomorphic-dompurify"
 import { getNewsBySlug } from "@/lib/queries/newsQueries"
 import { formatDateShort } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -33,6 +32,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
+// Sanitizador seguro para entorno servidor (sin dependencias pesadas de JSDOM)
+function sanitizeHtmlContent(html: string | null | undefined): string {
+  if (!html) return ""
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/on\w+="[^"]*"/gi, "")
+    .replace(/on\w+='[^']*'/gi, "")
+    .replace(/javascript:[^"']*/gi, "")
+}
+
 export default async function NoticiaDetallePage({ params }: Props) {
   const { slug } = await params
   const news = await getNewsBySlug(slug)
@@ -41,7 +50,7 @@ export default async function NoticiaDetallePage({ params }: Props) {
     notFound()
   }
 
-  const sanitizedContent = DOMPurify.sanitize(news.content)
+  const sanitizedContent = sanitizeHtmlContent(news.content)
 
   return (
     <article className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
