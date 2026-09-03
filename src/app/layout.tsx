@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
-import { ThemeProvider } from "next-themes"
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants"
 
 const geistSans = Geist({
@@ -58,24 +57,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="es"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#0B0F19] text-[#F0F4F8]">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          forcedTheme="dark"
-          disableTransitionOnChange
+      <body className="min-h-full flex flex-col bg-white text-slate-900">
+        {/* Skip to content — accesibilidad */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[#1D64F2] focus:text-white focus:font-bold focus:shadow-lg"
         >
-          {/* Skip to content — accesibilidad */}
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[#5FA8D3] focus:text-[#0B0F19] focus:font-bold focus:shadow-lg"
-          >
-            Saltar al contenido
-          </a>
-          {children}
-        </ThemeProvider>
+          Saltar al contenido
+        </a>
+        {children}
       </body>
     </html>
   )

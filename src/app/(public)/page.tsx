@@ -3,294 +3,412 @@ import { cacheLife } from "next/cache"
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { Trophy, Calendar, Sparkles, ArrowRight, ShieldCheck, Award } from "lucide-react"
+import {
+  Calendar,
+  UserPlus,
+  Users,
+  Trophy,
+  Award,
+  Globe,
+  MapPin,
+  ArrowRight,
+} from "lucide-react"
 
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants"
 import { getUpcomingTournaments } from "@/lib/queries/tournamentQueries"
 import { getPublicNews } from "@/lib/queries/newsQueries"
 import { TournamentCard } from "@/components/public/TournamentCard"
 import { NewsCard } from "@/components/public/NewsCard"
-import { SponsorsSection } from "@/components/public/SponsorsSection"
 import { PageLoadingSpinner } from "@/components/shared/LoadingSpinner"
-import { Button } from "@/components/ui/button"
 
 export const metadata: Metadata = {
-  title: `${SITE_NAME} — Fundación de Ajedrez en República Dominicana`,
+  title: `${SITE_NAME} — Fundación de Ajedrez`,
   description: SITE_DESCRIPTION,
 }
 
-// Hero estático de alto impacto con el escudo oficial
+// ─── 1. Hero Section ───
 function HeroSection() {
   return (
-    <section
-      className="relative overflow-hidden bg-[#0B0F19] py-20 sm:py-28 lg:py-32"
-      aria-labelledby="hero-heading"
-    >
-      {/* Resplandor ambiental y patrón sutil */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#5FA8D3]/10 rounded-full blur-3xl pointer-events-none"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `repeating-conic-gradient(#5FA8D3 0% 25%, transparent 0% 50%)`,
-          backgroundSize: "48px 48px",
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-        
-        {/* Escudo / Logo Oficial */}
-        <div className="relative mb-8 group">
-          <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#2B5B84] via-[#5FA8D3] to-[#2B5B84] opacity-50 blur-lg group-hover:opacity-75 transition duration-500" />
-          <div className="relative h-32 w-32 sm:h-40 sm:w-40 overflow-hidden rounded-full border-2 border-[#2B5B84] bg-[#132238] shadow-2xl p-1">
-            <div className="relative h-full w-full rounded-full overflow-hidden">
-              <Image
-                src="/images/logo.jpg"
-                alt="Escudo Oficial Fundación WALFA-CHESS"
-                fill
-                sizes="(max-width: 640px) 128px, 160px"
-                className="object-cover scale-105"
-                priority
-              />
-            </div>
-          </div>
+    <section className="relative overflow-hidden bg-[#0A1931] text-white">
+      {/* Background Image / Chess Piece Graphic on Desktop */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute right-0 top-0 bottom-0 w-full lg:w-1/2 h-full opacity-35 lg:opacity-90">
+          <Image
+            src="/mockup/hero-chess-hd.jpg"
+            alt="Rey de Ajedrez Dorado WALFA-CHESS"
+            fill
+            priority
+            className="object-cover object-right"
+          />
+          {/* Gradient overlay for seamless blending on the left */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0A1931] via-[#0A1931]/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A1931] via-transparent to-transparent" />
         </div>
+      </div>
 
-        {/* Badge de Localización / Oficial */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-[#2B5B84] bg-[#132238] px-4 py-1.5 mb-6 shadow-sm">
-          <span className="h-2 w-2 rounded-full bg-[#5FA8D3] animate-pulse" aria-hidden="true" />
-          <span className="text-xs font-bold text-[#F0F4F8] tracking-widest uppercase">
-            República Dominicana
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
+        <div className="max-w-2xl">
+          {/* Subtítulo azul eléctrico */}
+          <span className="inline-block text-[#1D64F2] font-black tracking-widest text-xs sm:text-sm uppercase mb-3">
+            BIENVENIDOS A
           </span>
-        </div>
 
-        {/* Título Principal */}
-        <h1
-          id="hero-heading"
-          className="text-4xl font-black tracking-tight text-[#F0F4F8] sm:text-6xl lg:text-7xl max-w-4xl"
-        >
-          Fundación de Ajedrez{" "}
-          <span className="text-[#5FA8D3] block sm:inline">WALFA-CHESS</span>
-        </h1>
+          {/* Gran Título Principal */}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-none uppercase">
+            WALFA-CHESS
+          </h1>
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white tracking-wide mt-2 uppercase">
+            FUNDACIÓN DE AJEDREZ
+          </h2>
 
-        {/* Descripción */}
-        <p className="mx-auto mt-6 max-w-2xl text-lg sm:text-xl text-[#94A3B8] leading-relaxed">
-          Promoviendo la excelencia, disciplina y competitividad del ajedrez dominicano. Consulta torneos oficiales, clasificaciones y noticias en tiempo real.
-        </p>
+          {/* Párrafo descriptivo */}
+          <p className="mt-5 text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed">
+            Promovemos el ajedrez como herramienta de formación, disciplina y
+            desarrollo integral para niños, jóvenes y adultos.
+          </p>
 
-        {/* Botones de Acción */}
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-          <Link href="/inscripciones" className="w-full sm:w-auto">
-            <Button
-              size="lg"
-              className="w-full sm:w-auto bg-[#5FA8D3] text-[#0B0F19] hover:bg-[#4A96C2] font-black text-base px-8 py-3.5 shadow-lg shadow-[#5FA8D3]/20"
-            >
-              Inscríbete Ahora
-            </Button>
-          </Link>
-          <Link href="/torneos" className="w-full sm:w-auto">
-            <Button
-              size="lg"
-              variant="secondary"
-              className="w-full sm:w-auto bg-[#132238] border border-[#2B5B84] text-[#F0F4F8] hover:bg-[#1a2d4a] hover:border-[#5FA8D3] text-base px-8 py-3.5 font-bold"
-            >
-              Ver Torneos
-            </Button>
-          </Link>
-        </div>
+          {/* Botones de acción */}
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <Link href="/torneos">
+              <button className="inline-flex items-center gap-2 bg-[#1D64F2] hover:bg-[#1554cf] active:scale-95 text-white font-extrabold text-xs uppercase tracking-wider px-6 py-3.5 rounded shadow-lg transition duration-200">
+                <Calendar className="h-4 w-4" />
+                <span>PRÓXIMOS TORNEOS</span>
+              </button>
+            </Link>
 
-        {/* Trust Badges */}
-        <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-[#2B5B84]/40 max-w-3xl w-full text-center">
-          <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-[#94A3B8]">
-            <ShieldCheck className="h-4 w-4 text-[#5FA8D3] shrink-0" />
-            <span>Torneos Validados</span>
-          </div>
-          <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-[#94A3B8]">
-            <Award className="h-4 w-4 text-[#5FA8D3] shrink-0" />
-            <span>Premios & Reconocimientos</span>
-          </div>
-          <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-[#94A3B8]">
-            <Sparkles className="h-4 w-4 text-[#5FA8D3] shrink-0" />
-            <span>Comunidad Activa</span>
+            <Link href="/inscripciones">
+              <button className="inline-flex items-center gap-2 bg-transparent hover:bg-white/10 active:scale-95 text-white border border-white/80 font-extrabold text-xs uppercase tracking-wider px-6 py-3.5 rounded transition duration-200">
+                <UserPlus className="h-4 w-4" />
+                <span>INSCRÍBETE AHORA</span>
+              </button>
+            </Link>
           </div>
         </div>
-
       </div>
     </section>
   )
 }
 
-// Sección de Torneos Próximos
-async function UpcomingTournamentsSection() {
+// ─── 2. Sección Combinada: Próximos Torneos & Noticias ───
+// Datos de respaldo idénticos a la maqueta por si no hay datos en BD
+const MOCK_TOURNAMENTS = [
+  {
+    id: "mock-1",
+    title: "WALFA-CHESS Blitz San Pedro 2026",
+    slug: "walfa-chess-blitz-san-pedro-2026",
+    start_date: "2026-02-22T09:00:00Z",
+    end_date: "2026-02-22T18:00:00Z",
+    location: "Recinto UASD, San Pedro",
+    cover_image_url: "/mockup/tournament-1.jpg",
+    type: "blitz" as const,
+    status: "published" as const,
+    inscription_type: "open" as const,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: "mock-2",
+    title: "Match Internacional GM Lelys Martínez vs MI Josue Araujo",
+    slug: "match-internacional-lelys-martinez-vs-josue-araujo",
+    start_date: "2026-03-06T14:00:00Z",
+    end_date: "2026-03-06T20:00:00Z",
+    location: "Presencial - Santiago",
+    cover_image_url: "/mockup/tournament-2.jpg",
+    type: "blitz" as const,
+    status: "published" as const,
+    inscription_type: "open" as const,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: "mock-3",
+    title: "Gran Simultánea GM Lesly Martínez Duany",
+    slug: "gran-simultanea-gm-lesly-martinez-duany",
+    start_date: "2026-02-28T10:00:00Z",
+    end_date: "2026-02-28T16:00:00Z",
+    location: "Parque Ercilia Pepín",
+    cover_image_url: "/mockup/tournament-3.jpg",
+    type: "blitz" as const,
+    status: "published" as const,
+    inscription_type: "open" as const,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+]
+
+const MOCK_NEWS = [
+  {
+    id: "mock-n1",
+    title: "WALFA-CHESS continúa impulsando el ajedrez en todo el país",
+    slug: "walfa-chess-continua-impulsando-el-ajedrez-en-todo-el-pais",
+    published_at: "2025-05-15T12:00:00Z",
+    cover_image_url: "/mockup/news-1.jpg",
+    is_published: true,
+    is_featured: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: "mock-n2",
+    title: "Excelente participación en el Torneo Blitz Higuey 2026",
+    slug: "excelente-participacion-en-el-torneo-blitz-higuey-2026",
+    published_at: "2025-05-10T12:00:00Z",
+    cover_image_url: "/mockup/news-2.jpg",
+    is_published: true,
+    is_featured: false,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: "mock-n3",
+    title: "Escuela de Talentos Kendry Moron sigue formando campeones",
+    slug: "escuela-de-talentos-kendry-moron-sigue-formando-campeones",
+    published_at: "2025-05-05T12:00:00Z",
+    cover_image_url: "/mockup/news-3.jpg",
+    is_published: true,
+    is_featured: false,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+]
+
+async function TournamentsAndNewsSection() {
   "use cache"
   cacheLife("minutes")
 
-  const tournaments = await getUpcomingTournaments(3)
+  const dbTournaments = await getUpcomingTournaments(3)
+  const dbNews = await getPublicNews(3)
+
+  const tournamentsToDisplay =
+    dbTournaments && dbTournaments.length > 0 ? dbTournaments : MOCK_TOURNAMENTS
+  const newsToDisplay = dbNews && dbNews.length > 0 ? dbNews : MOCK_NEWS
 
   return (
-    <section
-      className="py-20 bg-[#0B0F19] border-t border-[#2B5B84]/40"
-      aria-labelledby="tournaments-heading"
-    >
+    <section className="bg-white py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-          <div>
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-[#5FA8D3] uppercase tracking-wider mb-2">
-              <Trophy className="h-4 w-4" />
-              <span>Competencias Oficiales</span>
-            </div>
-            <h2
-              id="tournaments-heading"
-              className="text-3xl font-extrabold tracking-tight text-[#F0F4F8] sm:text-4xl"
-            >
-              Próximos Torneos
-            </h2>
-            <p className="mt-2 text-base text-[#94A3B8]">
-              Participa en los eventos oficiales organizados por WALFA-CHESS.
-            </p>
-          </div>
-          <Link
-            href="/torneos"
-            className="mt-4 md:mt-0 inline-flex items-center gap-1 text-sm font-bold text-[#5FA8D3] hover:underline"
-          >
-            Ver calendario completo <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8">
+          {/* ─── Columna Izquierda: PRÓXIMOS TORNEOS (8 cols) ─── */}
+          <div className="lg:col-span-8 flex flex-col justify-between">
+            <div>
+              <h2 className="text-sm sm:text-base font-black tracking-wider text-[#0A1931] uppercase mb-6">
+                PRÓXIMOS TORNEOS
+              </h2>
 
-        {tournaments.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {tournaments.map((tournament) => (
-              <TournamentCard key={tournament.id} tournament={tournament} />
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-2xl border border-[#2B5B84] bg-[#132238] p-10 text-center shadow-xl">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0B0F19] border border-[#2B5B84]">
-              <Calendar className="h-7 w-7 text-[#5FA8D3]" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {tournamentsToDisplay.map((tournament) => (
+                  <TournamentCard key={tournament.id} tournament={tournament as any} />
+                ))}
+              </div>
             </div>
-            <h3 className="text-xl font-bold text-[#F0F4F8]">Próximas convocatorias en preparación</h3>
-            <p className="mt-2 text-sm text-[#94A3B8] max-w-md mx-auto">
-              Estamos programando las fechas para el siguiente torneo nacional. Mantente atento a nuestras publicaciones.
-            </p>
-            <div className="mt-6">
-              <Link href="/inscripciones">
-                <Button className="bg-[#5FA8D3] text-[#0B0F19] hover:bg-[#4A96C2] font-bold">
-                  Preinscribirme
-                </Button>
+
+            {/* Botón centrado: VER TODOS LOS TORNEOS */}
+            <div className="mt-8 text-center">
+              <Link href="/torneos">
+                <button className="inline-flex items-center justify-center px-6 py-2.5 rounded border border-[#1D64F2] text-[#1D64F2] hover:bg-[#1D64F2] hover:text-white font-extrabold text-xs uppercase tracking-wider transition-colors duration-200 shadow-sm">
+                  VER TODOS LOS TORNEOS
+                </button>
               </Link>
             </div>
           </div>
-        )}
+
+          {/* ─── Columna Derecha: NOTICIAS (4 cols) ─── */}
+          <div className="lg:col-span-4 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-200 pt-8 lg:pt-0 lg:pl-8">
+            <div>
+              <h2 className="text-sm sm:text-base font-black tracking-wider text-[#0A1931] uppercase mb-6">
+                NOTICIAS
+              </h2>
+
+              <div className="space-y-4 divide-y divide-slate-100">
+                {newsToDisplay.map((item) => (
+                  <NewsCard key={item.id} news={item as any} variant="compact" />
+                ))}
+              </div>
+            </div>
+
+            {/* Enlace: VER TODAS LAS NOTICIAS → */}
+            <div className="mt-8 pt-4 border-t border-slate-100">
+              <Link
+                href="/noticias"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1D64F2] hover:text-[#1554cf] uppercase tracking-wider transition-colors"
+              >
+                <span>VER TODAS LAS NOTICIAS</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   )
 }
 
-// Estadísticas de la Fundación
-function StatsSection() {
+// ─── 3. Cinta de Estadísticas (Full-width Stats Bar) ───
+function StatsRibbon() {
   const stats = [
-    { label: "Torneos Realizados", value: "10+" },
-    { label: "Jugadores Registrados", value: "150+" },
-    { label: "Categorías Oficiales", value: "6+" },
-    { label: "Provincias Conectadas", value: "8+" },
+    {
+      icon: Users,
+      value: "+1,200",
+      label: "Jugadores Formados",
+    },
+    {
+      icon: Trophy,
+      value: "+80",
+      label: "Torneos Realizados",
+    },
+    {
+      icon: Award,
+      value: "+150",
+      label: "Campeones Destacados",
+    },
+    {
+      icon: Globe,
+      value: "+15",
+      label: "Provincias Alcanzadas",
+    },
   ]
 
   return (
-    <section className="bg-[#132238] border-y border-[#2B5B84] py-16" aria-labelledby="stats-heading">
-      <h2 id="stats-heading" className="sr-only">Estadísticas de WALFA-CHESS</h2>
+    <section className="bg-[#081830] text-white py-10 border-y border-slate-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <dl className="grid grid-cols-2 gap-8 md:grid-cols-4">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="text-center p-4 rounded-xl bg-[#0B0F19]/40 border border-[#2B5B84]/50"
-            >
-              <dt className="text-xs sm:text-sm font-medium text-[#94A3B8]">{stat.label}</dt>
-              <dd className="mt-2 text-3xl sm:text-5xl font-black text-[#5FA8D3] tracking-tight">
-                {stat.value}
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+          {stats.map((stat) => {
+            const Icon = stat.icon
+            return (
+              <div
+                key={stat.label}
+                className="flex items-center justify-center gap-3 sm:gap-4 text-left"
+              >
+                <div className="text-white opacity-80 shrink-0">
+                  <Icon className="h-8 w-8 sm:h-10 sm:w-10 stroke-[1.5]" />
+                </div>
+                <div>
+                  <div className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
+                    {stat.value}
+                  </div>
+                  <div className="text-[11px] sm:text-xs text-slate-300 font-medium leading-tight mt-0.5">
+                    {stat.label}
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </section>
   )
 }
 
-// Sección de Noticias Recientes
-async function RecentNewsSection() {
-  const news = await getPublicNews(3)
+// ─── 4. Galería Destacada ───
+function FeaturedGallerySection() {
+  const galleryItems = [
+    { src: "/mockup/gallery-1.jpg", alt: "Torneo Infantil WALFA-CHESS" },
+    { src: "/mockup/gallery-2.jpg", alt: "Trofeos y Premiaciones Oficiales" },
+    { src: "/mockup/gallery-3.jpg", alt: "Ceremonia de Clausura y Diplomas" },
+    { src: "/mockup/gallery-4.jpg", alt: "Sala de Juego y Competencia" },
+    { src: "/mockup/gallery-5.jpg", alt: "Jugador Concentrado en Apertura" },
+  ]
 
   return (
-    <section
-      className="py-20 bg-[#0B0F19]"
-      aria-labelledby="news-heading"
-    >
+    <section className="bg-white py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-12">
-          <div>
-            <h2
-              id="news-heading"
-              className="text-3xl font-extrabold tracking-tight text-[#F0F4F8] sm:text-4xl"
+        <h2 className="text-sm sm:text-base font-black tracking-wider text-[#0A1931] uppercase mb-6">
+          GALERÍA DESTACADA
+        </h2>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          {galleryItems.map((item, index) => (
+            <div
+              key={index}
+              className="group relative aspect-[4/3] rounded-lg overflow-hidden bg-slate-900 shadow-sm hover:shadow-md transition-all duration-300"
             >
-              Últimas Noticias & Novedades
-            </h2>
-            <p className="mt-2 text-base text-[#94A3B8]">
-              Entérate de las actividades, premiaciones y crónicas del ajedrez dominicano.
-            </p>
-          </div>
-          <Link
-            href="/noticias"
-            className="text-sm font-bold text-[#5FA8D3] hover:underline hidden sm:flex items-center gap-1"
-            aria-label="Ver todas las noticias"
-          >
-            Ver todas <ArrowRight className="h-4 w-4" />
-          </Link>
+              <Image
+                src={item.src}
+                alt={item.alt}
+                fill
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+          ))}
         </div>
 
-        {news.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {news.map((item) => (
-              <NewsCard key={item.id} news={item} />
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-2xl border border-[#2B5B84] bg-[#132238] p-10 text-center shadow-xl">
-            <p className="text-sm text-[#94A3B8]">
-              Las noticias y coberturas oficiales aparecerán aquí tras ser publicadas en el panel administrativo.
-            </p>
-            <div className="mt-4">
-              <Link
-                href="/noticias"
-                className="inline-block text-sm font-bold text-[#5FA8D3] hover:underline"
-              >
-                Explorar archivo de artículos →
-              </Link>
-            </div>
-          </div>
-        )}
+        {/* Botón centrado: VER TODA LA GALERÍA */}
+        <div className="mt-8 text-center">
+          <Link href="/galeria">
+            <button className="inline-flex items-center justify-center px-6 py-2.5 rounded border border-[#1D64F2] text-[#1D64F2] hover:bg-[#1D64F2] hover:text-white font-extrabold text-xs uppercase tracking-wider transition-colors duration-200 shadow-sm">
+              VER TODA LA GALERÍA
+            </button>
+          </Link>
+        </div>
       </div>
     </section>
   )
 }
 
+// ─── 5. Patrocinadores y Colaboradores ───
+function SponsorsRowSection() {
+  const sponsors = [
+    {
+      name: "integratec - Soluciones Tecnológicas",
+      logo: "/mockup/sponsor-1.jpg",
+    },
+    {
+      name: "ESCUELA DE TALENTOS KENDRY MORON",
+      logo: "/mockup/sponsor-2.jpg",
+    },
+    {
+      name: "CANAL DE ONIEL SANTANA STREAMING",
+      logo: "/mockup/sponsor-3.jpg",
+    },
+    {
+      name: "WALFA-TECH TECNOLOGÍA E INNOVACIÓN",
+      logo: "/mockup/sponsor-4.jpg",
+    },
+  ]
+
+  return (
+    <section className="bg-white pb-16 pt-4">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Encabezado con línea horizontal que se extiende */}
+        <div className="flex items-center gap-4 mb-8">
+          <h2 className="text-xs sm:text-sm font-black tracking-wider text-[#0A1931] uppercase shrink-0">
+            PATROCINADORES Y COLABORADORES
+          </h2>
+          <div className="h-px bg-slate-200 flex-1" />
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
+          {sponsors.map((sponsor, index) => (
+            <div
+              key={index}
+              className="h-16 relative flex items-center justify-center p-2 rounded-lg border border-slate-100 hover:border-slate-200 bg-white transition duration-200"
+            >
+              <Image
+                src={sponsor.logo}
+                alt={sponsor.name}
+                width={180}
+                height={50}
+                className="object-contain max-h-12 w-auto"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Página Principal ───
 export default function HomePage() {
   return (
     <>
       <HeroSection />
       <Suspense fallback={<PageLoadingSpinner />}>
-        <UpcomingTournamentsSection />
+        <TournamentsAndNewsSection />
       </Suspense>
-      <StatsSection />
-      <Suspense fallback={<PageLoadingSpinner />}>
-        <RecentNewsSection />
-      </Suspense>
-      <Suspense fallback={<PageLoadingSpinner />}>
-        <SponsorsSection />
-      </Suspense>
+      <StatsRibbon />
+      <FeaturedGallerySection />
+      <SponsorsRowSection />
     </>
   )
 }
