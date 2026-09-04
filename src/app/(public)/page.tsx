@@ -42,7 +42,7 @@ function HeroSection() {
             alt="Rey de Ajedrez Dorado WALFA-CHESS"
             fill
             priority
-            className="object-cover object-right"
+            className="object-cover object-center"
           />
           {/* Gradient overlay for seamless blending on the left */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#0A1931] via-[#0A1931]/60 to-transparent" />
