@@ -19,6 +19,7 @@ import { getUpcomingTournaments } from "@/lib/queries/tournamentQueries"
 import { getPublicNews } from "@/lib/queries/newsQueries"
 import { getStatsRibbonConfig } from "@/lib/queries/settingsQueries"
 import { getFeaturedGalleryImages } from "@/lib/queries/galleryQueries"
+import { getActiveSponsors } from "@/lib/queries/sponsorQueries"
 import { TournamentCard } from "@/components/public/TournamentCard"
 import { NewsCard } from "@/components/public/NewsCard"
 import { HomeGallerySection } from "@/components/public/HomeGallerySection"
@@ -338,52 +339,92 @@ async function FeaturedGallerySection() {
 }
 
 // ─── 5. Patrocinadores y Colaboradores ───
-function SponsorsRowSection() {
-  const sponsors = [
+async function SponsorsRowSection() {
+  const dbSponsors = await getActiveSponsors()
+
+  const fallbackSponsors = [
     {
+      id: "mock-1",
       name: "integratec - Soluciones Tecnológicas",
-      logo: "/mockup/sponsor-1.jpg",
+      logo: "/mockup/sponsor-1.png",
+      website_url: null,
     },
     {
+      id: "mock-2",
       name: "ESCUELA DE TALENTOS KENDRY MORON",
-      logo: "/mockup/sponsor-2.jpg",
+      logo: "/mockup/sponsor-2.png",
+      website_url: null,
     },
     {
+      id: "mock-3",
       name: "CANAL DE ONIEL SANTANA STREAMING",
-      logo: "/mockup/sponsor-3.jpg",
+      logo: "/mockup/sponsor-3.png",
+      website_url: null,
     },
     {
+      id: "mock-4",
       name: "WALFA-TECH TECNOLOGÍA E INNOVACIÓN",
-      logo: "/mockup/sponsor-4.jpg",
+      logo: "/mockup/sponsor-4.png",
+      website_url: null,
     },
   ]
 
+  const sponsors = dbSponsors.length > 0
+    ? dbSponsors.map((s) => ({
+        id: s.id,
+        name: s.name,
+        logo: s.logo_url || "/mockup/sponsor-1.png",
+        website_url: s.website_url,
+      }))
+    : fallbackSponsors
+
   return (
-    <section className="bg-white pb-16 pt-4">
+    <section className="bg-white pb-16 pt-4" aria-labelledby="sponsors-heading">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Encabezado con línea horizontal que se extiende */}
         <div className="flex items-center gap-4 mb-8">
-          <h2 className="text-xs sm:text-sm font-black tracking-wider text-[#0A1931] uppercase shrink-0">
+          <h2
+            id="sponsors-heading"
+            className="text-xs sm:text-sm font-black tracking-wider text-[#0A1931] uppercase shrink-0"
+          >
             PATROCINADORES Y COLABORADORES
           </h2>
           <div className="h-px bg-slate-200 flex-1" />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
-          {sponsors.map((sponsor, index) => (
-            <div
-              key={index}
-              className="h-16 relative flex items-center justify-center p-2 rounded-lg border border-slate-100 hover:border-slate-200 bg-white transition duration-200"
-            >
-              <Image
-                src={sponsor.logo}
-                alt={sponsor.name}
-                width={180}
-                height={50}
-                className="object-contain max-h-12 w-auto"
-              />
-            </div>
-          ))}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 items-center">
+          {sponsors.map((sponsor) => {
+            const cardContent = (
+              <div className="h-20 sm:h-24 relative flex items-center justify-center p-3 sm:p-4 rounded-xl border border-slate-100 hover:border-slate-300 bg-white transition-all duration-200 shadow-sm hover:shadow-md group">
+                <div className="relative h-12 sm:h-14 w-full flex items-center justify-center">
+                  <Image
+                    src={sponsor.logo}
+                    alt={sponsor.name}
+                    fill
+                    className="object-contain transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 640px) 160px, (max-width: 1024px) 220px, 280px"
+                  />
+                </div>
+              </div>
+            )
+
+            if (sponsor.website_url) {
+              return (
+                <a
+                  key={sponsor.id}
+                  href={sponsor.website_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1D64F2] rounded-xl"
+                  title={`Visitar web de ${sponsor.name}`}
+                >
+                  {cardContent}
+                </a>
+              )
+            }
+
+            return <div key={sponsor.id}>{cardContent}</div>
+          })}
         </div>
       </div>
     </section>
@@ -404,7 +445,9 @@ export default function HomePage() {
       <Suspense fallback={<div className="h-64 bg-white" />}>
         <FeaturedGallerySection />
       </Suspense>
-      <SponsorsRowSection />
+      <Suspense fallback={<div className="h-24 bg-white" />}>
+        <SponsorsRowSection />
+      </Suspense>
     </>
   )
 }
