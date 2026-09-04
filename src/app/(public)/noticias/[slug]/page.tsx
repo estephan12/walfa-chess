@@ -107,16 +107,25 @@ export default async function NoticiaDetallePage({ params }: Props) {
         )}
       </header>
 
-      {/* Imagen de portada destacada */}
+      {/* Imagen de portada destacada (sin cortes y en alta nitidez) */}
       {news.cover_image_url && (
-        <div className="relative aspect-video sm:aspect-[21/9] w-full rounded-2xl overflow-hidden border border-slate-200 shadow-md my-8 bg-slate-900">
+        <div className="relative aspect-[16/10] sm:aspect-[16/9] max-h-[540px] w-full rounded-2xl overflow-hidden border border-slate-200 shadow-md my-8 bg-slate-950 flex items-center justify-center">
+          {/* Fondo ambiental suave con los colores de la foto */}
+          <Image
+            src={news.cover_image_url}
+            alt=""
+            fill
+            className="object-cover blur-2xl opacity-35 scale-110"
+            aria-hidden="true"
+          />
+          {/* Fotografía principal completa y nítida */}
           <Image
             src={news.cover_image_url}
             alt={news.title}
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 896px"
-            className="object-cover"
+            className="object-contain relative z-10"
           />
         </div>
       )}

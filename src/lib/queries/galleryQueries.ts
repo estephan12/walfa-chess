@@ -22,7 +22,8 @@ export async function getPublicAlbums(): Promise<AlbumWithDetails[]> {
     .select(`
       *,
       tournament:tournaments(id, title, slug),
-      images:gallery_images(count)
+      images:gallery_images(count),
+      first_image:gallery_images(url)
     `)
     .eq("is_published", true)
     .order("sort_order", { ascending: true })
@@ -35,9 +36,50 @@ export async function getPublicAlbums(): Promise<AlbumWithDetails[]> {
 
   return (data || []).map((album: any) => ({
     ...album,
+    cover_image_url: album.cover_image_url || album.first_image?.[0]?.url || null,
     image_count: album.images?.[0]?.count ?? 0,
     images: undefined,
   }))
+}
+
+/**
+ * Obtiene las imágenes más recientes de la galería para la portada
+ */
+export async function getFeaturedGalleryImages(limit: number = 5): Promise<{
+  id: string
+  url: string
+  alt: string
+  albumTitle: string
+  albumSlug: string
+}[]> {
+  const supabase = createPublicClient()
+
+  const { data, error } = await supabase
+    .from("gallery_images")
+    .select(`
+      id,
+      url,
+      alt_text,
+      caption,
+      album:gallery_albums(title, slug, is_published)
+    `)
+    .order("created_at", { ascending: false })
+    .limit(limit * 2)
+
+  if (error || !data || data.length === 0) {
+    return []
+  }
+
+  return data
+    .filter((img: any) => img.album?.is_published !== false)
+    .slice(0, limit)
+    .map((img: any) => ({
+      id: img.id,
+      url: img.url,
+      alt: img.caption || img.alt_text || img.album?.title || "Fotografía oficial WALFA-CHESS",
+      albumTitle: img.album?.title || "Galería Oficial",
+      albumSlug: img.album?.slug || "",
+    }))
 }
 
 /**

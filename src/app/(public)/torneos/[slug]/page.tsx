@@ -83,27 +83,38 @@ export default async function TorneoPage({ params }: TorneoPageProps) {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-10">
-        {/* Banner de Portada Hero */}
-        <div className="relative aspect-[21/9] sm:aspect-[24/9] w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 shadow-md mb-10">
+        {/* Banner de Portada Hero (Completo y sin cortes) */}
+        <div className="relative aspect-[16/10] sm:aspect-[18/9] max-h-[500px] w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-950 shadow-md mb-10 flex items-center justify-center">
           {tournament.cover_image_url ? (
-            <Image
-              src={tournament.cover_image_url}
-              alt={tournament.title}
-              fill
-              sizes="(max-width: 1200px) 100vw, 1200px"
-              className="object-cover"
-              priority
-            />
+            <>
+              {/* Fondo ambiental suave para rellenar marcos */}
+              <Image
+                src={tournament.cover_image_url}
+                alt=""
+                fill
+                className="object-cover blur-2xl opacity-40 scale-110"
+                aria-hidden="true"
+              />
+              {/* Afiche / Póster del torneo completo y nítido */}
+              <Image
+                src={tournament.cover_image_url}
+                alt={tournament.title}
+                fill
+                sizes="(max-width: 1200px) 100vw, 1200px"
+                className="object-contain relative z-10"
+                priority
+              />
+            </>
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-slate-800 text-slate-400">
               <Trophy className="h-20 w-20 opacity-40" />
             </div>
           )}
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none z-20" />
 
           {/* Badges sobre la portada */}
-          <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center justify-between gap-4">
+          <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center justify-between gap-4 z-30">
             <div className="flex items-center gap-3">
               <span className="rounded-lg bg-[#0A1931]/90 backdrop-blur border border-white/20 px-3.5 py-1.5 text-xs font-bold text-white uppercase tracking-wider">
                 {getTournamentTypeLabel(tournament.type)}

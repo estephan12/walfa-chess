@@ -18,8 +18,10 @@ import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants"
 import { getUpcomingTournaments } from "@/lib/queries/tournamentQueries"
 import { getPublicNews } from "@/lib/queries/newsQueries"
 import { getStatsRibbonConfig } from "@/lib/queries/settingsQueries"
+import { getFeaturedGalleryImages } from "@/lib/queries/galleryQueries"
 import { TournamentCard } from "@/components/public/TournamentCard"
 import { NewsCard } from "@/components/public/NewsCard"
+import { HomeGallerySection } from "@/components/public/HomeGallerySection"
 import { PageLoadingSpinner } from "@/components/shared/LoadingSpinner"
 
 export const metadata: Metadata = {
@@ -285,51 +287,54 @@ async function StatsRibbon() {
   )
 }
 
-// ─── 4. Galería Destacada ───
-function FeaturedGallerySection() {
-  const galleryItems = [
-    { src: "/mockup/gallery-1.jpg", alt: "Torneo Infantil WALFA-CHESS" },
-    { src: "/mockup/gallery-2.jpg", alt: "Trofeos y Premiaciones Oficiales" },
-    { src: "/mockup/gallery-3.jpg", alt: "Ceremonia de Clausura y Diplomas" },
-    { src: "/mockup/gallery-4.jpg", alt: "Sala de Juego y Competencia" },
-    { src: "/mockup/gallery-5.jpg", alt: "Jugador Concentrado en Apertura" },
+// ─── 4. Galería Destacada Interactiva ───
+async function FeaturedGallerySection() {
+  const dbImages = await getFeaturedGalleryImages(5)
+
+  // Fotos de alta definición oficiales de WALFA-CHESS
+  const fallbackImages = [
+    {
+      id: "f1",
+      url: "https://jmdblmwokglcwkkabjzy.supabase.co/storage/v1/object/public/gallery/albums/a6126d85-dd92-4337-b1e3-8d464529914c/album-a6126d85-dd92-4337-b1e3-8d464529914c-1788311102217-tj293f.jpg",
+      alt: "Torneo Infantil y Juvenil WALFA-CHESS",
+      albumTitle: "WALFA-CHESS VERANO PUERTO PLATA 2026",
+      albumSlug: "walfa-chess-verano-puerto-plata-2026",
+    },
+    {
+      id: "f2",
+      url: "https://jmdblmwokglcwkkabjzy.supabase.co/storage/v1/object/public/gallery/albums/a6126d85-dd92-4337-b1e3-8d464529914c/album-a6126d85-dd92-4337-b1e3-8d464529914c-1788311138579-4o52o5.jpg",
+      alt: "Ceremonia de Clausura y Premiación",
+      albumTitle: "WALFA-CHESS VERANO PUERTO PLATA 2026",
+      albumSlug: "walfa-chess-verano-puerto-plata-2026",
+    },
+    {
+      id: "f3",
+      url: "https://jmdblmwokglcwkkabjzy.supabase.co/storage/v1/object/public/gallery/albums/a6126d85-dd92-4337-b1e3-8d464529914c/album-a6126d85-dd92-4337-b1e3-8d464529914c-1788311139733-mv5a1b.jpg",
+      alt: "Ronda de Competencia Oficial",
+      albumTitle: "WALFA-CHESS VERANO PUERTO PLATA 2026",
+      albumSlug: "walfa-chess-verano-puerto-plata-2026",
+    },
+    {
+      id: "f4",
+      url: "https://jmdblmwokglcwkkabjzy.supabase.co/storage/v1/object/public/gallery/albums/a6126d85-dd92-4337-b1e3-8d464529914c/album-a6126d85-dd92-4337-b1e3-8d464529914c-1788311140507-5lrna7.jpg",
+      alt: "Ajedrecistas en Partida de Apertura",
+      albumTitle: "WALFA-CHESS VERANO PUERTO PLATA 2026",
+      albumSlug: "walfa-chess-verano-puerto-plata-2026",
+    },
+    {
+      id: "f5",
+      url: "https://jmdblmwokglcwkkabjzy.supabase.co/storage/v1/object/public/news/covers/news-1788084008775-8eowrat.jpg",
+      alt: "Maestro Internacional Josué Araujo - Medalla de Oro",
+      albumTitle: "Logros y Campeonatos",
+      albumSlug: "walfa-chess-verano-puerto-plata-2026",
+    },
   ]
 
-  return (
-    <section className="bg-white py-12 sm:py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="text-sm sm:text-base font-black tracking-wider text-[#0A1931] uppercase mb-6">
-          GALERÍA DESTACADA
-        </h2>
+  const displayImages = dbImages.length > 0 
+    ? [...dbImages, ...fallbackImages.slice(dbImages.length)].slice(0, 5)
+    : fallbackImages
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {galleryItems.map((item, index) => (
-            <div
-              key={index}
-              className="group relative aspect-[4/3] rounded-lg overflow-hidden bg-slate-900 shadow-sm hover:shadow-md transition-all duration-300"
-            >
-              <Image
-                src={item.src}
-                alt={item.alt}
-                fill
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* Botón centrado: VER TODA LA GALERÍA */}
-        <div className="mt-8 text-center">
-          <Link href="/galeria">
-            <button className="inline-flex items-center justify-center px-6 py-2.5 rounded border border-[#1D64F2] text-[#1D64F2] hover:bg-[#1D64F2] hover:text-white font-extrabold text-xs uppercase tracking-wider transition-colors duration-200 shadow-sm">
-              VER TODA LA GALERÍA
-            </button>
-          </Link>
-        </div>
-      </div>
-    </section>
-  )
+  return <HomeGallerySection images={displayImages} />
 }
 
 // ─── 5. Patrocinadores y Colaboradores ───
@@ -396,7 +401,9 @@ export default function HomePage() {
       <Suspense fallback={<div className="h-24 bg-[#081830]" />}>
         <StatsRibbon />
       </Suspense>
-      <FeaturedGallerySection />
+      <Suspense fallback={<div className="h-64 bg-white" />}>
+        <FeaturedGallerySection />
+      </Suspense>
       <SponsorsRowSection />
     </>
   )
