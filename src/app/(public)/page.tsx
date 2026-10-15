@@ -165,8 +165,8 @@ const MOCK_NEWS = [
   },
   {
     id: "mock-n3",
-    title: "Escuela de Talentos Kendry Moron sigue formando campeones",
-    slug: "escuela-de-talentos-kendry-moron-sigue-formando-campeones",
+    title: "Escuela de Talentos sigue formando nuevos campeones",
+    slug: "escuela-de-talentos-sigue-formando-nuevos-campeones",
     published_at: "2025-05-05T12:00:00Z",
     cover_image_url: "/mockup/news-3.jpg",
     is_published: true,
@@ -350,18 +350,6 @@ async function SponsorsRowSection() {
       website_url: null,
     },
     {
-      id: "mock-2",
-      name: "ESCUELA DE TALENTOS KENDRY MORON",
-      logo: "/mockup/sponsor-2.png",
-      website_url: null,
-    },
-    {
-      id: "mock-3",
-      name: "CANAL DE ONIEL SANTANA STREAMING",
-      logo: "/mockup/sponsor-3.png",
-      website_url: null,
-    },
-    {
       id: "mock-4",
       name: "WALFA-TECH TECNOLOGÍA E INNOVACIÓN",
       logo: "/mockup/sponsor-4.png",
@@ -392,7 +380,7 @@ async function SponsorsRowSection() {
           <div className="h-px bg-slate-200 flex-1" />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 items-center">
+        <div className={`grid grid-cols-2 gap-4 sm:gap-6 items-center ${sponsors.length <= 2 ? "max-w-2xl mx-auto" : "md:grid-cols-4"}`}>
           {sponsors.map((sponsor) => {
             const cardContent = (
               <div className="h-20 sm:h-24 relative flex items-center justify-center p-3 sm:p-4 rounded-xl border border-slate-100 hover:border-slate-300 bg-white transition-all duration-200 shadow-sm hover:shadow-md group">
