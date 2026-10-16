@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { createClient, createPublicClient } from "@/lib/supabase/server"
+import { createClient, createAdminClient } from "@/lib/supabase/server"
 import {
   createInscriptionSchema,
   updateInscriptionStatusSchema,
@@ -28,11 +28,13 @@ export async function submitInscriptionAction(
       full_name,
       email,
       phone,
+      province,
       fide_id,
       notes,
     } = validated.data
 
-    const supabase = createPublicClient()
+    // Usar cliente administrativo para validar, insertar y retornar el ID sin restricciones RLS públicas
+    const supabase = createAdminClient()
 
     // 1. Validar que el torneo existe y está abierto
     const { data: tournament, error: tournamentError } = await supabase
@@ -77,25 +79,40 @@ export async function submitInscriptionAction(
       }
     }
 
-    // 3. Prevenir inscripciones duplicadas con el mismo correo en el mismo torneo
-    const cleanEmail = email.trim().toLowerCase()
+    // 3. Prevenir inscripciones duplicadas con el mismo número o correo en el mismo torneo
+    const cleanPhone = phone.trim()
+    const digitsOnly = cleanPhone.replace(/\D/g, "")
+    const hasRealEmail = Boolean(email && email.trim().length > 0)
+    const cleanEmail = hasRealEmail
+      ? email!.trim().toLowerCase()
+      : `${digitsOnly || Date.now()}@whatsapp.walfachess.com`
+
     const { data: existing } = await supabase
       .from("inscriptions")
       .select("id, status")
       .eq("tournament_id", tournament_id)
-      .eq("email", cleanEmail)
+      .or(`phone.eq.${cleanPhone},email.eq.${cleanEmail}`)
       .maybeSingle()
 
     if (existing) {
       return {
         success: false,
-        error: `Ya existe una inscripción registrada con el correo ${cleanEmail} para este torneo (Estado: ${
+        error: `Ya existe una inscripción registrada con este número de WhatsApp para este torneo (Estado: ${
           existing.status === "confirmed" ? "Confirmada" : "En revisión"
         }).`,
       }
     }
 
-    // 4. Insertar la inscripción
+    // 4. Integrar la provincia en las notas de la inscripción
+    const cleanProvince = province && province.trim().length > 0 ? province.trim() : null
+    let combinedNotes = notes && notes.trim().length > 0 ? notes.trim() : null
+    if (cleanProvince) {
+      combinedNotes = combinedNotes
+        ? `Provincia: ${cleanProvince} | ${combinedNotes}`
+        : `Provincia: ${cleanProvince}`
+    }
+
+    // 5. Insertar la inscripción
     const { data: inserted, error: insertError } = await supabase
       .from("inscriptions")
       .insert({
@@ -103,9 +120,9 @@ export async function submitInscriptionAction(
         category_id: category_id && category_id.length > 0 ? category_id : null,
         full_name: full_name.trim(),
         email: cleanEmail,
-        phone: phone.trim(),
+        phone: cleanPhone,
         fide_id: fide_id && fide_id.trim().length > 0 ? fide_id.trim() : null,
-        notes: notes && notes.trim().length > 0 ? notes.trim() : null,
+        notes: combinedNotes,
         status: "pending",
       })
       .select("id")
@@ -125,7 +142,7 @@ export async function submitInscriptionAction(
         id: inserted.id,
         tournamentTitle: tournament.title,
       },
-      message: "¡Inscripción recibida exitosamente! Tu solicitud será revisada por el comité organizador.",
+      message: "¡Inscripción recibida exitosamente! Te contactaremos vía WhatsApp para confirmar tu participación.",
     }
   } catch (err) {
     console.error("Error inesperado en submitInscriptionAction:", err)

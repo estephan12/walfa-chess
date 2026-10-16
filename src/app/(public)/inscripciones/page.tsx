@@ -69,7 +69,7 @@ export default function InscripcionesPage({ searchParams }: InscripcionesPagePro
               <Clock className="h-4 w-4 text-[#1D64F2]" /> 2. Confirmación
             </p>
             <p>
-              Recibirás un mensaje de WhatsApp o correo confirmando tu número de partida y mesa asignada previo a la primera ronda.
+              Recibirás un mensaje de WhatsApp confirmando los detalles de tu registro y mesa asignada previo a la primera ronda.
             </p>
           </div>
 

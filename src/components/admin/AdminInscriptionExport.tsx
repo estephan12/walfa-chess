@@ -18,8 +18,9 @@ export function AdminInscriptionExport({ inscriptions }: AdminInscriptionExportP
     const headers = [
       "ID",
       "Nombre Completo",
+      "Provincia",
       "Email",
-      "Teléfono",
+      "WhatsApp / Teléfono",
       "FIDE ID",
       "Torneo",
       "Categoría",
@@ -28,18 +29,28 @@ export function AdminInscriptionExport({ inscriptions }: AdminInscriptionExportP
       "Fecha de Registro",
     ]
 
-    const rows = inscriptions.map((ins) => [
-      ins.id,
-      `"${(ins.full_name || "").replace(/"/g, '""')}"`,
-      `"${(ins.email || "").replace(/"/g, '""')}"`,
-      `"${(ins.phone || "").replace(/"/g, '""')}"`,
-      `"${(ins.fide_id || "").replace(/"/g, '""')}"`,
-      `"${(ins.tournament?.title || "").replace(/"/g, '""')}"`,
-      `"${(ins.category?.name || "General").replace(/"/g, '""')}"`,
-      ins.status === "confirmed" ? "Confirmada" : ins.status === "rejected" ? "Rechazada" : "Pendiente",
-      `"${(ins.notes || "").replace(/"/g, '""')}"`,
-      new Date(ins.created_at).toLocaleDateString("es-DO"),
-    ])
+    const rows = inscriptions.map((ins) => {
+      const emailDisplay = ins.email?.includes("@whatsapp.walfachess.com") ? "" : (ins.email || "")
+      const matchProv = ins.notes?.match(/Provincia:\s*([^|\n\r]+)/i)
+      const provinceDisplay = matchProv ? matchProv[1].trim() : ""
+      const cleanNotes = ins.notes
+        ? ins.notes.replace(/Provincia:\s*[^|\n\r]+(\s*\|\s*)?/i, "").trim()
+        : ""
+
+      return [
+        ins.id,
+        `"${(ins.full_name || "").replace(/"/g, '""')}"`,
+        `"${provinceDisplay.replace(/"/g, '""')}"`,
+        `"${emailDisplay.replace(/"/g, '""')}"`,
+        `"${(ins.phone || "").replace(/"/g, '""')}"`,
+        `"${(ins.fide_id || "").replace(/"/g, '""')}"`,
+        `"${(ins.tournament?.title || "").replace(/"/g, '""')}"`,
+        `"${(ins.category?.name || "General").replace(/"/g, '""')}"`,
+        ins.status === "confirmed" ? "Confirmada" : ins.status === "rejected" ? "Rechazada" : "Pendiente",
+        `"${cleanNotes.replace(/"/g, '""')}"`,
+        new Date(ins.created_at).toLocaleDateString("es-DO"),
+      ]
+    })
 
     const csvContent =
       "data:text/csv;charset=utf-8,\uFEFF" +

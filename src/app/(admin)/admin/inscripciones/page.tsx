@@ -11,6 +11,7 @@ import {
   Phone,
   MessageCircle,
   Trophy,
+  MapPin,
 } from "lucide-react"
 import { connection } from "next/server"
 import {
@@ -53,12 +54,13 @@ export default async function AdminInscripcionesPage({
     getAllTournamentsAdmin(),
   ])
 
-  // Filtro de búsqueda en memoria por nombre/email si se pasa `q`
+  // Filtro de búsqueda en memoria por nombre/teléfono/email si se pasa `q`
   const inscriptions = searchQuery
     ? inscriptionsData.filter((ins) => {
         const query = searchQuery.toLowerCase()
         return (
           ins.full_name.toLowerCase().includes(query) ||
+          (ins.phone && ins.phone.toLowerCase().includes(query)) ||
           ins.email.toLowerCase().includes(query) ||
           (ins.fide_id && ins.fide_id.toLowerCase().includes(query))
         )
@@ -222,6 +224,11 @@ export default async function AdminInscripcionesPage({
               <tbody className="divide-y divide-[#2B5B84]/50">
                 {inscriptions.map((ins) => {
                   const phoneClean = (ins.phone || "").replace(/\D/g, "")
+                  const matchProv = ins.notes?.match(/Provincia:\s*([^|\n\r]+)/i)
+                  const provinceName = matchProv ? matchProv[1].trim() : null
+                  const displayNotes = ins.notes
+                    ? ins.notes.replace(/Provincia:\s*[^|\n\r]+(\s*\|\s*)?/i, "").trim()
+                    : null
 
                   return (
                     <tr key={ins.id} className="hover:bg-[#1a2d4a]/50 transition-colors">
@@ -231,6 +238,12 @@ export default async function AdminInscripcionesPage({
                           <User className="h-4 w-4 text-[#5FA8D3] shrink-0" />
                           <span>{ins.full_name}</span>
                         </div>
+                        {provinceName && (
+                          <div className="mt-1 flex items-center gap-1.5 text-[11px] font-semibold text-[#5FA8D3]">
+                            <MapPin className="h-3 w-3 shrink-0" />
+                            <span>{provinceName}</span>
+                          </div>
+                        )}
                         {ins.fide_id && (
                           <div className="mt-1">
                             <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-[#0B0F19] border border-[#2B5B84] text-[10px] font-mono text-[#5FA8D3]">
@@ -238,9 +251,9 @@ export default async function AdminInscripcionesPage({
                             </span>
                           </div>
                         )}
-                        {ins.notes && (
-                          <p className="mt-1 text-[11px] text-[#94A3B8] line-clamp-1 italic" title={ins.notes}>
-                            &quot;{ins.notes}&quot;
+                        {displayNotes && (
+                          <p className="mt-1 text-[11px] text-[#94A3B8] line-clamp-1 italic" title={displayNotes}>
+                            &quot;{displayNotes}&quot;
                           </p>
                         )}
                       </td>
@@ -257,30 +270,34 @@ export default async function AdminInscripcionesPage({
 
                       {/* Contacto */}
                       <td className="py-4 px-4 space-y-1">
-                        <div className="flex items-center gap-1.5 text-[#94A3B8]">
-                          <Mail className="h-3.5 w-3.5 text-[#5FA8D3]" />
-                          <a
-                            href={`mailto:${ins.email}`}
-                            className="hover:text-[#5FA8D3] hover:underline"
-                          >
-                            {ins.email}
-                          </a>
-                        </div>
                         {ins.phone && (
-                          <div className="flex items-center gap-2 text-[#94A3B8]">
-                            <Phone className="h-3.5 w-3.5 text-[#5FA8D3]" />
-                            <span>{ins.phone}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-white flex items-center gap-1.5">
+                              <Phone className="h-3.5 w-3.5 text-emerald-400" />
+                              {ins.phone}
+                            </span>
                             {phoneClean.length >= 8 && (
                               <a
-                                href={`https://wa.me/${phoneClean.startsWith("1") ? phoneClean : `1${phoneClean}`}`}
+                                href={`https://wa.me/${phoneClean.startsWith("1") ? phoneClean : (phoneClean.length === 10 ? `1${phoneClean}` : phoneClean)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 title="Escribir por WhatsApp"
-                                className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 hover:underline bg-emerald-950/60 border border-emerald-500/30 px-1.5 py-0.5 rounded"
+                                className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 bg-emerald-950/70 border border-emerald-500/40 px-2 py-0.5 rounded-lg shadow-sm hover:bg-emerald-900/80 transition"
                               >
-                                <MessageCircle className="h-3 w-3" /> WA
+                                <MessageCircle className="h-3 w-3" /> WhatsApp
                               </a>
                             )}
+                          </div>
+                        )}
+                        {ins.email && !ins.email.includes("@whatsapp.walfachess.com") && (
+                          <div className="flex items-center gap-1.5 text-[#94A3B8]">
+                            <Mail className="h-3.5 w-3.5 text-[#5FA8D3]" />
+                            <a
+                              href={`mailto:${ins.email}`}
+                              className="hover:text-[#5FA8D3] hover:underline"
+                            >
+                              {ins.email}
+                            </a>
                           </div>
                         )}
                       </td>

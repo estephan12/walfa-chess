@@ -5,15 +5,27 @@ export const createInscriptionSchema = z.object({
   category_id: z.string().uuid("Categoría inválida").optional().nullable().or(z.literal("")),
   full_name: z
     .string()
-    .min(3, "El nombre completo debe tener al menos 3 caracteres")
+    .min(3, "El nombre y apellido debe tener al menos 3 caracteres")
     .max(100, "El nombre no puede exceder 100 caracteres"),
-  email: z
-    .string()
-    .email("Ingrese una dirección de correo electrónico válida"),
   phone: z
     .string()
-    .min(7, "El teléfono de contacto debe tener al menos 7 dígitos")
-    .max(25, "El teléfono es demasiado largo"),
+    .min(7, "El número de WhatsApp debe tener al menos 7 dígitos")
+    .max(25, "El número de WhatsApp es demasiado largo"),
+  province: z
+    .string()
+    .min(2, "Por favor, selecciona tu provincia de procedencia")
+    .max(100)
+    .optional()
+    .nullable()
+    .or(z.literal("")),
+  email: z
+    .string()
+    .optional()
+    .nullable()
+    .or(z.literal(""))
+    .refine((val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
+      message: "Ingrese una dirección de correo válida o déjelo en blanco",
+    }),
   fide_id: z
     .string()
     .max(20, "El ID FIDE no puede superar los 20 caracteres")

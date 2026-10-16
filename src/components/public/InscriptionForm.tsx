@@ -11,16 +11,15 @@ import {
   AlertCircle,
   Loader2,
   ArrowRight,
-  ShieldCheck,
   User,
-  Mail,
   Phone,
-  Hash,
-  MessageSquare,
+  MessageCircle,
+  Mail,
 } from "lucide-react"
 import type { TournamentWithCategories } from "@/lib/queries/inscriptionQueries"
 import { submitInscriptionAction } from "@/lib/actions/inscriptionActions"
 import { formatDateRange, formatCurrency, formatDate } from "@/lib/utils"
+import { DOMINICAN_PROVINCES } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
 
 interface InscriptionFormProps {
@@ -37,12 +36,10 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
   const [selectedTournamentId, setSelectedTournamentId] = useState<string>(
     defaultTournament?.id ?? ""
   )
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("")
   const [fullName, setFullName] = useState("")
-  const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
-  const [fideId, setFideId] = useState("")
-  const [notes, setNotes] = useState("")
+  const [province, setProvince] = useState("")
+  const [email, setEmail] = useState("")
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -50,11 +47,12 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
     id: string
     tournamentTitle: string
     fullName: string
-    email: string
+    phone: string
+    province: string
+    email?: string
   } | null>(null)
 
   const currentTournament = tournaments.find((t) => t.id === selectedTournamentId)
-  const availableCategories = currentTournament?.categories ?? []
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -65,18 +63,23 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
       return
     }
 
-    if (!fullName.trim()) {
-      setErrorMessage("Por favor, ingresa tu nombre completo.")
+    if (!fullName.trim() || fullName.trim().length < 3) {
+      setErrorMessage("Por favor, ingresa tu nombre y apellido (mínimo 3 caracteres).")
       return
     }
 
-    if (!email.trim()) {
-      setErrorMessage("Por favor, ingresa un correo electrónico válido.")
+    if (!phone.trim() || phone.trim().replace(/\D/g, "").length < 7) {
+      setErrorMessage("Por favor, ingresa un número de WhatsApp válido (mínimo 7 dígitos).")
       return
     }
 
-    if (!phone.trim()) {
-      setErrorMessage("Por favor, ingresa tu número telefónico o WhatsApp.")
+    if (!province.trim()) {
+      setErrorMessage("Por favor, selecciona la provincia de donde eres.")
+      return
+    }
+
+    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setErrorMessage("Por favor, ingresa un correo electrónico válido o déjalo en blanco.")
       return
     }
 
@@ -86,11 +89,9 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
       const result = await submitInscriptionAction({
         tournament_id: selectedTournamentId,
         full_name: fullName.trim(),
-        email: email.trim(),
         phone: phone.trim(),
-        category_id: selectedCategoryId || undefined,
-        fide_id: fideId.trim() || undefined,
-        notes: notes.trim() || undefined,
+        province: province.trim(),
+        email: email.trim() || undefined,
       })
 
       if (!result.success) {
@@ -100,7 +101,9 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
           id: result.data?.id ?? "",
           tournamentTitle: currentTournament?.title ?? "Torneo Oficial",
           fullName: fullName.trim(),
-          email: email.trim(),
+          phone: phone.trim(),
+          province: province.trim(),
+          email: email.trim() || undefined,
         })
       }
     } catch {
@@ -112,11 +115,9 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
 
   function handleReset() {
     setFullName("")
-    setEmail("")
     setPhone("")
-    setFideId("")
-    setNotes("")
-    setSelectedCategoryId("")
+    setProvince("")
+    setEmail("")
     setErrorMessage(null)
     setSubmittedData(null)
   }
@@ -151,9 +152,32 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
             </span>
           </div>
           <div className="flex justify-between items-center pb-3 border-b border-slate-200">
-            <span className="text-slate-500">Correo Registrado:</span>
-            <span className="font-bold text-slate-900">{submittedData.email}</span>
+            <span className="text-slate-500">Participante:</span>
+            <span className="font-bold text-slate-900">{submittedData.fullName}</span>
           </div>
+          <div className="flex justify-between items-center pb-3 border-b border-slate-200">
+            <span className="text-slate-500">Provincia:</span>
+            <span className="font-bold text-slate-900 flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5 text-[#1D64F2]" />
+              {submittedData.province}
+            </span>
+          </div>
+          <div className="flex justify-between items-center pb-3 border-b border-slate-200">
+            <span className="text-slate-500">WhatsApp:</span>
+            <span className="font-bold text-emerald-600 flex items-center gap-1.5">
+              <MessageCircle className="h-3.5 w-3.5" />
+              {submittedData.phone}
+            </span>
+          </div>
+          {submittedData.email && (
+            <div className="flex justify-between items-center pb-3 border-b border-slate-200">
+              <span className="text-slate-500">Correo Electrónico:</span>
+              <span className="font-bold text-slate-900 flex items-center gap-1.5">
+                <Mail className="h-3.5 w-3.5 text-slate-500" />
+                {submittedData.email}
+              </span>
+            </div>
+          )}
           <div className="flex justify-between items-center">
             <span className="text-slate-500">Estado:</span>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-300 text-amber-800 text-[11px] font-bold">
@@ -163,7 +187,7 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
         </div>
 
         <p className="mt-6 text-xs text-slate-500 leading-relaxed">
-          El comité organizador verificará los datos técnicos y te contactará vía WhatsApp o correo electrónico para confirmar tu participación y los detalles del certamen.
+          El comité organizador verificará los datos y te contactará vía WhatsApp para confirmar tu participación y los detalles del certamen.
         </p>
 
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -172,7 +196,7 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
             variant="secondary"
             className="w-full sm:w-auto bg-slate-100 border border-slate-200 text-slate-800 hover:bg-slate-200 font-bold text-sm px-6"
           >
-            Inscribir a otro jugador
+            Inscribir a otra persona
           </Button>
           <Link href="/torneos" className="w-full sm:w-auto">
             <Button className="w-full sm:w-auto bg-[#1D64F2] text-white hover:bg-[#1554cf] font-bold text-sm px-6">
@@ -226,7 +250,6 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
           value={selectedTournamentId}
           onChange={(e) => {
             setSelectedTournamentId(e.target.value)
-            setSelectedCategoryId("")
           }}
           required
           className="w-full rounded-xl bg-slate-50 border border-slate-200 px-4 py-3.5 text-sm font-bold text-slate-900 focus:border-[#1D64F2] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#1D64F2] transition"
@@ -276,55 +299,23 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
         )}
       </div>
 
-      {/* 2. Categoría (si aplica) */}
-      {availableCategories.length > 0 && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
-          <label
-            htmlFor="category_select"
-            className="block text-sm font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center gap-2"
-          >
-            <ShieldCheck className="h-4 w-4 text-[#1D64F2]" />
-            2. Categoría o Rama
-          </label>
-          <p className="text-xs text-slate-500 mb-4">
-            Selecciona la categoría correspondiente a tu Elo o edad.
-          </p>
-
-          <select
-            id="category_select"
-            value={selectedCategoryId}
-            onChange={(e) => setSelectedCategoryId(e.target.value)}
-            className="w-full rounded-xl bg-slate-50 border border-slate-200 px-4 py-3.5 text-sm font-bold text-slate-900 focus:border-[#1D64F2] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#1D64F2] transition"
-          >
-            <option value="">Categoría General / Abierta</option>
-            {availableCategories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-                {cat.max_rating ? ` (Hasta Elo ${cat.max_rating})` : ""}
-                {cat.prize ? ` — Premio: ${cat.prize}` : ""}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-
-      {/* 3. Datos del Jugador */}
+      {/* 2. Datos para el Registro */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-6">
         <div>
           <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-1 flex items-center gap-2">
             <User className="h-4 w-4 text-[#1D64F2]" />
-            {availableCategories.length > 0 ? "3. Datos del Jugador" : "2. Datos del Jugador"}
+            2. Datos del Participante
           </h2>
           <p className="text-xs text-slate-500">
-            Información personal y de contacto para el listado oficial y emparejamientos.
+            Completa tus datos personales para formalizar tu registro.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {/* Nombre */}
-          <div className="sm:col-span-2">
+          {/* Nombre y Apellido */}
+          <div>
             <label htmlFor="full_name" className="block text-xs font-bold text-slate-800 mb-2">
-              Nombre Completo *
+              Nombre y Apellido *
             </label>
             <div className="relative">
               <User className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
@@ -334,35 +325,16 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Ej. José Raúl Capablanca"
+                placeholder="Ej. Roberto Carlos Rodríguez"
                 className="w-full rounded-xl bg-slate-50 border border-slate-200 pl-10 pr-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#1D64F2] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#1D64F2]"
               />
             </div>
           </div>
 
-          {/* Email */}
-          <div>
-            <label htmlFor="email" className="block text-xs font-bold text-slate-800 mb-2">
-              Correo Electrónico *
-            </label>
-            <div className="relative">
-              <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-              <input
-                id="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="correo@ejemplo.com"
-                className="w-full rounded-xl bg-slate-50 border border-slate-200 pl-10 pr-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#1D64F2] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#1D64F2]"
-              />
-            </div>
-          </div>
-
-          {/* Teléfono / WhatsApp */}
+          {/* WhatsApp */}
           <div>
             <label htmlFor="phone" className="block text-xs font-bold text-slate-800 mb-2">
-              Teléfono / WhatsApp *
+              WhatsApp *
             </label>
             <div className="relative">
               <Phone className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
@@ -376,42 +348,49 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
                 className="w-full rounded-xl bg-slate-50 border border-slate-200 pl-10 pr-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#1D64F2] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#1D64F2]"
               />
             </div>
-          </div>
-
-          {/* FIDE ID */}
-          <div className="sm:col-span-2">
-            <label htmlFor="fide_id" className="block text-xs font-bold text-slate-800 mb-2">
-              FIDE ID <span className="text-slate-400 font-normal">(opcional)</span>
-            </label>
-            <div className="relative">
-              <Hash className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-              <input
-                id="fide_id"
-                type="text"
-                value={fideId}
-                onChange={(e) => setFideId(e.target.value)}
-                placeholder="Ej. 34105423 (dejar en blanco si no tiene)"
-                className="w-full rounded-xl bg-slate-50 border border-slate-200 pl-10 pr-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#1D64F2] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#1D64F2]"
-              />
-            </div>
-            <p className="text-[11px] text-slate-500 mt-1.5">
-              Si estás federado ante la FIDE, indícalo para agilizar el emparejamiento técnico.
+            <p className="text-[11px] text-slate-500 mt-1.5 flex items-center gap-1">
+              <MessageCircle className="h-3 w-3 text-emerald-600 inline shrink-0" />
+              Te contactaremos por este medio con los detalles del torneo.
             </p>
           </div>
 
-          {/* Notas o comentarios */}
-          <div className="sm:col-span-2">
-            <label htmlFor="notes" className="block text-xs font-bold text-slate-800 mb-2">
-              Comentarios o Club / Asociación <span className="text-slate-400 font-normal">(opcional)</span>
+          {/* Provincia de procedencia */}
+          <div>
+            <label htmlFor="province" className="block text-xs font-bold text-slate-800 mb-2">
+              Provincia de Procedencia *
             </label>
             <div className="relative">
-              <MessageSquare className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-              <textarea
-                id="notes"
-                rows={3}
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Ej. Club de Ajedrez Santo Domingo Este / Solicito bye en ronda 1 si está permitido..."
+              <MapPin className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400 pointer-events-none" />
+              <select
+                id="province"
+                required
+                value={province}
+                onChange={(e) => setProvince(e.target.value)}
+                className="w-full rounded-xl bg-slate-50 border border-slate-200 pl-10 pr-4 py-3 text-sm text-slate-900 focus:border-[#1D64F2] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#1D64F2] transition"
+              >
+                <option value="">Selecciona tu provincia...</option>
+                {DOMINICAN_PROVINCES.map((prov) => (
+                  <option key={prov} value={prov}>
+                    {prov}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Correo Electrónico (opcional) */}
+          <div>
+            <label htmlFor="email" className="block text-xs font-bold text-slate-800 mb-2">
+              Correo Electrónico <span className="text-slate-400 font-normal">(opcional)</span>
+            </label>
+            <div className="relative">
+              <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="correo@ejemplo.com (opcional)"
                 className="w-full rounded-xl bg-slate-50 border border-slate-200 pl-10 pr-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#1D64F2] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#1D64F2]"
               />
             </div>
@@ -440,11 +419,11 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
               <Loader2 className="h-5 w-5 animate-spin" /> Procesando inscripción...
             </span>
           ) : (
-            "Completar Inscripción Oficial"
+            "Completar Inscripción"
           )}
         </Button>
         <p className="text-[11px] text-slate-500 mt-3">
-          Al enviar este formulario aceptas las bases y el código de disciplina del certamen.
+          Al enviar este formulario confirmas tu solicitud para el torneo seleccionado.
         </p>
       </div>
     </form>
