@@ -34,6 +34,9 @@ export const playerSchema = z.object({
   fide_id: z.string().optional().nullable(),
   fide_rating: z.any().optional().nullable(),
   local_rating: z.any().optional().nullable(),
+  rating_standard: z.any().optional().nullable(),
+  rating_rapid: z.any().optional().nullable(),
+  rating_blitz: z.any().optional().nullable(),
   photo_url: z.string().optional().nullable(),
   bio: z.string().optional().nullable(),
   is_active: z.boolean().default(true),
@@ -49,6 +52,9 @@ export type PlayerFormData = {
   fide_id?: string | null
   fide_rating?: number | null
   local_rating?: number | null
+  rating_standard?: number | null
+  rating_rapid?: number | null
+  rating_blitz?: number | null
   photo_url?: string | null
   bio?: string | null
   is_active: boolean

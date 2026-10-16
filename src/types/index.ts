@@ -62,6 +62,9 @@ export interface Player {
   fide_id: string | null
   fide_rating: number | null
   local_rating: number | null
+  rating_standard?: number | null
+  rating_rapid?: number | null
+  rating_blitz?: number | null
   photo_url: string | null
   bio: string | null
   is_active: boolean

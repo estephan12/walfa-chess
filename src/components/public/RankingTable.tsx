@@ -12,12 +12,28 @@ import {
   Filter,
   X,
   Medal,
+  Flame,
+  Clock,
 } from "lucide-react"
 import type { Player } from "@/types"
 
 interface RankingTableProps {
   initialPlayers: Player[]
 }
+
+type RatingModality = "standard" | "rapid" | "blitz" | "local"
+
+const RATING_MODALITIES: {
+  id: RatingModality
+  label: string
+  shortLabel: string
+  icon: any
+}[] = [
+  { id: "standard", label: "Estándar (Clásico)", shortLabel: "Estándar", icon: Award },
+  { id: "rapid", label: "Rápido", shortLabel: "Rápido", icon: Clock },
+  { id: "blitz", label: "Blitz (Relámpago)", shortLabel: "Blitz", icon: Flame },
+  { id: "local", label: "Nacional / Local", shortLabel: "Nacional", icon: Shield },
+]
 
 const CATEGORY_FILTERS = [
   { id: "all", label: "Todos los Jugadores" },
@@ -29,9 +45,22 @@ const CATEGORY_FILTERS = [
   { id: "amateur", label: "♟ Aficionados (<1600)" },
 ]
 
+function getPlayerRating(p: Player, type: RatingModality): number {
+  switch (type) {
+    case "standard":
+      return (p.rating_standard || p.fide_rating) ?? 0
+    case "rapid":
+      return p.rating_rapid ?? 0
+    case "blitz":
+      return p.rating_blitz ?? 0
+    case "local":
+      return p.local_rating ?? 0
+  }
+}
+
 export function RankingTable({ initialPlayers }: RankingTableProps) {
   const [search, setSearch] = useState("")
-  const [ratingType, setRatingType] = useState<"fide" | "local">("fide")
+  const [ratingType, setRatingType] = useState<RatingModality>("standard")
   const [selectedCategory, setSelectedCategory] = useState("all")
 
   // Filtrado y ordenación de jugadores en memoria para respuesta instantánea
@@ -51,10 +80,10 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
       )
     }
 
-    // 2. Filtro por categoría
+    // 2. Filtro por categoría según la modalidad seleccionada
     if (selectedCategory !== "all") {
       list = list.filter((p) => {
-        const rating = (ratingType === "local" ? p.local_rating : p.fide_rating) ?? 0
+        const rating = getPlayerRating(p, ratingType)
 
         switch (selectedCategory) {
           case "titled":
@@ -75,10 +104,10 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
       })
     }
 
-    // 3. Ordenar por el Elo seleccionado
+    // 3. Ordenar por la modalidad de Elo seleccionada (descendente)
     list.sort((a, b) => {
-      const ratingA = (ratingType === "local" ? a.local_rating : a.fide_rating) ?? 0
-      const ratingB = (ratingType === "local" ? b.local_rating : b.fide_rating) ?? 0
+      const ratingA = getPlayerRating(a, ratingType)
+      const ratingB = getPlayerRating(b, ratingType)
       return ratingB - ratingA
     })
 
@@ -120,9 +149,11 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
     )
   }
 
+  const activeModality = RATING_MODALITIES.find((m) => m.id === ratingType)
+
   return (
     <div className="space-y-6">
-      {/* BARRA DE CONTROLES: BÚSQUEDA, TABS DE ELO Y FILTROS */}
+      {/* BARRA DE CONTROLES: BÚSQUEDA, TABS DE MODALIDADES Y FILTROS */}
       <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
         <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
           {/* Buscador */}
@@ -146,32 +177,28 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
             )}
           </div>
 
-          {/* Selector de tipo de Rating (FIDE vs Local) */}
-          <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-xl border border-slate-200 shrink-0">
-            <button
-              type="button"
-              onClick={() => setRatingType("fide")}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                ratingType === "fide"
-                  ? "bg-[#1D64F2] text-white shadow-sm"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              <Award className="h-3.5 w-3.5" />
-              Elo FIDE Oficial
-            </button>
-            <button
-              type="button"
-              onClick={() => setRatingType("local")}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                ratingType === "local"
-                  ? "bg-[#1D64F2] text-white shadow-sm"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              <Shield className="h-3.5 w-3.5" />
-              Elo Nacional / Local
-            </button>
+          {/* Selector de Modalidades: Estándar, Rápido, Blitz, Nacional */}
+          <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200 shrink-0 overflow-x-auto">
+            {RATING_MODALITIES.map((mod) => {
+              const Icon = mod.icon
+              const isActive = ratingType === mod.id
+
+              return (
+                <button
+                  key={mod.id}
+                  type="button"
+                  onClick={() => setRatingType(mod.id)}
+                  className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                    isActive
+                      ? "bg-[#1D64F2] text-white shadow-sm"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
+                  }`}
+                >
+                  <Icon className="h-3.5 w-3.5 shrink-0" />
+                  <span>{mod.label}</span>
+                </button>
+              )
+            })}
           </div>
         </div>
 
@@ -218,12 +245,15 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
         </div>
       ) : (
         <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
-          <div className="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+          <div className="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between flex-wrap gap-2">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
               Mostrando {filteredPlayers.length} {filteredPlayers.length === 1 ? "jugador" : "jugadores"}
             </span>
-            <span className="text-xs text-[#1D64F2] font-semibold">
-              Ordenado por: {ratingType === "fide" ? "Elo FIDE" : "Elo Nacional"}
+            <span className="text-xs text-[#1D64F2] font-semibold flex items-center gap-1.5">
+              <span>Ordenado por:</span>
+              <strong className="underline decoration-2 underline-offset-2">
+                Elo {activeModality?.shortLabel}
+              </strong>
             </span>
           </div>
 
@@ -231,26 +261,72 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
             <table className="w-full text-left text-sm text-slate-700">
               <thead className="bg-slate-50 text-xs uppercase font-bold text-slate-900 border-b border-slate-200">
                 <tr>
-                  <th scope="col" className="px-5 py-4 w-16 text-center">Pos.</th>
-                  <th scope="col" className="px-6 py-4">Jugador</th>
-                  <th scope="col" className="px-6 py-4 text-center">
+                  <th scope="col" className="px-4 py-4 w-14 text-center">Pos.</th>
+                  <th scope="col" className="px-5 py-4 min-w-[200px]">Jugador</th>
+                  
+                  {/* Estándar */}
+                  <th
+                    scope="col"
+                    className={`px-3 py-4 text-center transition-colors ${
+                      ratingType === "standard" ? "bg-blue-50 text-[#1D64F2]" : ""
+                    }`}
+                  >
                     <span className="flex items-center justify-center gap-1">
                       <Award className="h-3.5 w-3.5 text-amber-500" />
-                      Elo FIDE
+                      Estándar
                     </span>
                   </th>
-                  <th scope="col" className="px-6 py-4 text-center hidden md:table-cell">
+
+                  {/* Rápido */}
+                  <th
+                    scope="col"
+                    className={`px-3 py-4 text-center transition-colors ${
+                      ratingType === "rapid" ? "bg-blue-50 text-[#1D64F2]" : ""
+                    }`}
+                  >
+                    <span className="flex items-center justify-center gap-1">
+                      <Clock className="h-3.5 w-3.5 text-blue-500" />
+                      Rápido
+                    </span>
+                  </th>
+
+                  {/* Blitz */}
+                  <th
+                    scope="col"
+                    className={`px-3 py-4 text-center transition-colors ${
+                      ratingType === "blitz" ? "bg-blue-50 text-[#1D64F2]" : ""
+                    }`}
+                  >
+                    <span className="flex items-center justify-center gap-1">
+                      <Flame className="h-3.5 w-3.5 text-orange-500" />
+                      Blitz
+                    </span>
+                  </th>
+
+                  {/* Nacional */}
+                  <th
+                    scope="col"
+                    className={`px-3 py-4 text-center hidden md:table-cell transition-colors ${
+                      ratingType === "local" ? "bg-blue-50 text-[#1D64F2]" : ""
+                    }`}
+                  >
                     <span className="flex items-center justify-center gap-1">
                       <Shield className="h-3.5 w-3.5 text-emerald-600" />
-                      Elo Nacional
+                      Nacional
                     </span>
                   </th>
-                  <th scope="col" className="px-6 py-4 hidden lg:table-cell">Club / Asociación</th>
-                  <th scope="col" className="px-6 py-4 text-right hidden sm:table-cell">FIDE ID</th>
+
+                  <th scope="col" className="px-4 py-4 hidden lg:table-cell">Club / Asociación</th>
+                  <th scope="col" className="px-4 py-4 text-right hidden sm:table-cell">FIDE ID</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filteredPlayers.map((player, idx) => {
+                  const stdRating = player.rating_standard || player.fide_rating
+                  const rapRating = player.rating_rapid
+                  const blzRating = player.rating_blitz
+                  const locRating = player.local_rating
+
                   return (
                     <tr
                       key={player.id}
@@ -265,22 +341,22 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
                       }`}
                     >
                       {/* Posición / Rango */}
-                      <td className="px-5 py-4 text-center">
+                      <td className="px-4 py-4 text-center">
                         <div className="flex items-center justify-center">
                           {getRankBadge(idx)}
                         </div>
                       </td>
 
                       {/* Jugador con Avatar & Título */}
-                      <td className="px-6 py-4">
+                      <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="relative h-11 w-11 rounded-full bg-slate-100 overflow-hidden border border-slate-200 shrink-0 flex items-center justify-center">
+                          <div className="relative h-10 w-10 rounded-full bg-slate-100 overflow-hidden border border-slate-200 shrink-0 flex items-center justify-center">
                             {player.photo_url ? (
                               <Image
                                 src={player.photo_url}
                                 alt={player.full_name}
                                 fill
-                                sizes="44px"
+                                sizes="40px"
                                 className="object-cover"
                               />
                             ) : (
@@ -294,15 +370,15 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
                                   {player.title}
                                 </span>
                               )}
-                              <span className="font-bold text-base text-slate-900">
+                              <span className="font-bold text-sm text-slate-900">
                                 {player.full_name}
                               </span>
-                              <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded text-slate-500 font-mono uppercase">
+                              <span className="text-[10px] px-1 py-0.2 bg-slate-100 border border-slate-200 rounded text-slate-500 font-mono uppercase">
                                 {player.nationality || "DO"}
                               </span>
                             </div>
                             {player.bio && (
-                              <p className="text-xs text-slate-500 line-clamp-1 mt-0.5 max-w-sm">
+                              <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5 max-w-xs">
                                 {player.bio}
                               </p>
                             )}
@@ -310,30 +386,90 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
                         </div>
                       </td>
 
-                      {/* Elo FIDE */}
-                      <td className="px-6 py-4 text-center">
-                        {player.fide_rating ? (
+                      {/* Elo Estándar */}
+                      <td
+                        className={`px-3 py-4 text-center ${
+                          ratingType === "standard" ? "bg-blue-50/40" : ""
+                        }`}
+                      >
+                        {stdRating ? (
                           <span
-                            className={`inline-flex items-center justify-center px-2.5 py-1 rounded-lg font-mono font-black text-sm ${
-                              player.fide_rating >= 2200
-                                ? "bg-amber-100 text-amber-700 border border-amber-300"
-                                : player.fide_rating >= 2000
+                            className={`inline-flex items-center justify-center px-2 py-0.5 rounded-lg font-mono font-bold text-xs ${
+                              ratingType === "standard"
+                                ? "bg-[#1D64F2] text-white shadow-sm"
+                                : stdRating >= 2200
+                                ? "bg-amber-100 text-amber-800 border border-amber-300"
+                                : "bg-slate-100 text-slate-800 border border-slate-200"
+                            }`}
+                          >
+                            {stdRating}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-slate-400 italic">—</span>
+                        )}
+                      </td>
+
+                      {/* Elo Rápido */}
+                      <td
+                        className={`px-3 py-4 text-center ${
+                          ratingType === "rapid" ? "bg-blue-50/40" : ""
+                        }`}
+                      >
+                        {rapRating ? (
+                          <span
+                            className={`inline-flex items-center justify-center px-2 py-0.5 rounded-lg font-mono font-bold text-xs ${
+                              ratingType === "rapid"
+                                ? "bg-[#1D64F2] text-white shadow-sm"
+                                : rapRating >= 2000
                                 ? "bg-blue-50 text-[#1D64F2] border border-blue-200"
                                 : "bg-slate-100 text-slate-800 border border-slate-200"
                             }`}
                           >
-                            {player.fide_rating}
+                            {rapRating}
                           </span>
                         ) : (
-                          <span className="text-xs text-slate-400 italic">Sin Elo</span>
+                          <span className="text-xs text-slate-400 italic">—</span>
+                        )}
+                      </td>
+
+                      {/* Elo Blitz */}
+                      <td
+                        className={`px-3 py-4 text-center ${
+                          ratingType === "blitz" ? "bg-blue-50/40" : ""
+                        }`}
+                      >
+                        {blzRating ? (
+                          <span
+                            className={`inline-flex items-center justify-center px-2 py-0.5 rounded-lg font-mono font-bold text-xs ${
+                              ratingType === "blitz"
+                                ? "bg-[#1D64F2] text-white shadow-sm"
+                                : blzRating >= 2000
+                                ? "bg-orange-50 text-orange-700 border border-orange-200"
+                                : "bg-slate-100 text-slate-800 border border-slate-200"
+                            }`}
+                          >
+                            {blzRating}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-slate-400 italic">—</span>
                         )}
                       </td>
 
                       {/* Elo Nacional */}
-                      <td className="px-6 py-4 text-center hidden md:table-cell">
-                        {player.local_rating ? (
-                          <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg font-mono font-bold text-sm bg-emerald-50 text-emerald-700 border border-emerald-200">
-                            {player.local_rating}
+                      <td
+                        className={`px-3 py-4 text-center hidden md:table-cell ${
+                          ratingType === "local" ? "bg-blue-50/40" : ""
+                        }`}
+                      >
+                        {locRating ? (
+                          <span
+                            className={`inline-flex items-center justify-center px-2 py-0.5 rounded-lg font-mono font-bold text-xs ${
+                              ratingType === "local"
+                                ? "bg-[#1D64F2] text-white shadow-sm"
+                                : "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                            }`}
+                          >
+                            {locRating}
                           </span>
                         ) : (
                           <span className="text-xs text-slate-400 italic">—</span>
@@ -341,9 +477,9 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
                       </td>
 
                       {/* Club */}
-                      <td className="px-6 py-4 hidden lg:table-cell">
+                      <td className="px-4 py-4 hidden lg:table-cell">
                         {player.club ? (
-                          <span className="inline-flex items-center gap-1.5 text-xs text-slate-700 max-w-[200px] truncate" title={player.club}>
+                          <span className="inline-flex items-center gap-1.5 text-xs text-slate-700 max-w-[180px] truncate" title={player.club}>
                             <Building2 className="h-3.5 w-3.5 text-[#1D64F2] shrink-0" />
                             <span className="truncate">{player.club}</span>
                           </span>
@@ -353,7 +489,7 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
                       </td>
 
                       {/* FIDE ID Link */}
-                      <td className="px-6 py-4 text-right hidden sm:table-cell">
+                      <td className="px-4 py-4 text-right hidden sm:table-cell">
                         {player.fide_id ? (
                           <a
                             href={`https://ratings.fide.com/profile/${player.fide_id}`}

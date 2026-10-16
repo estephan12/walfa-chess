@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
-import { Plus, Users, Award, Shield, User, Hash, Building2 } from "lucide-react"
+import { Plus, Users, Award, Shield, User, Hash, Building2, Clock, Flame } from "lucide-react"
 import { connection } from "next/server"
 import { getAllPlayersAdmin } from "@/lib/queries/playerQueries"
 import { Button } from "@/components/ui/button"
@@ -111,14 +111,29 @@ export default async function AdminJugadoresPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      {player.fide_rating ? (
-                        <span className="inline-flex items-center gap-1 font-mono font-bold text-amber-400">
-                          <Award className="h-3.5 w-3.5" />
-                          {player.fide_rating}
-                        </span>
-                      ) : (
-                        <span className="text-xs text-[#94A3B8]/50 italic">Sin Elo</span>
-                      )}
+                      <div className="space-y-1">
+                        {player.rating_standard || player.fide_rating ? (
+                          <span className="inline-flex items-center gap-1 font-mono font-bold text-amber-400 text-xs">
+                            <Award className="h-3.5 w-3.5" />
+                            {player.rating_standard || player.fide_rating}
+                            <span className="text-[10px] text-[#94A3B8] font-normal">Estándar</span>
+                          </span>
+                        ) : (
+                          <span className="text-xs text-[#94A3B8]/50 italic block">Sin Elo Estándar</span>
+                        )}
+                        <div className="flex items-center gap-2 text-[11px] text-[#94A3B8]">
+                          {player.rating_rapid && (
+                            <span className="inline-flex items-center gap-0.5 text-blue-400 font-mono text-[11px]" title="Elo Rápido">
+                              <Clock className="h-3 w-3" /> {player.rating_rapid}
+                            </span>
+                          )}
+                          {player.rating_blitz && (
+                            <span className="inline-flex items-center gap-0.5 text-orange-400 font-mono text-[11px]" title="Elo Blitz">
+                              <Flame className="h-3 w-3" /> {player.rating_blitz}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </td>
                     <td className="px-6 py-4 hidden md:table-cell">
                       {player.local_rating ? (

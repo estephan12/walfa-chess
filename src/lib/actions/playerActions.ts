@@ -20,11 +20,18 @@ function sanitizeString(val: any): string | null {
 }
 
 function buildPlayerPayload(data: PlayerFormData) {
-  // Empaquetamos bio, title y club en formato JSON en el campo bio para máxima compatibilidad con la base de datos
+  const standardRating = sanitizeNumber(data.rating_standard ?? data.fide_rating)
+  const rapidRating = sanitizeNumber(data.rating_rapid)
+  const blitzRating = sanitizeNumber(data.rating_blitz)
+
+  // Empaquetamos bio, title, club y los ratings de modalidades en formato JSON en el campo bio para máxima compatibilidad
   const bioPayload = JSON.stringify({
     bio: sanitizeString(data.bio),
     title: sanitizeString(data.title),
     club: sanitizeString(data.club),
+    rating_standard: standardRating,
+    rating_rapid: rapidRating,
+    rating_blitz: blitzRating,
   })
 
   return {
@@ -33,7 +40,7 @@ function buildPlayerPayload(data: PlayerFormData) {
     birth_date: sanitizeString(data.birth_date),
     nationality: sanitizeString(data.nationality) || "DO",
     fide_id: sanitizeString(data.fide_id),
-    fide_rating: sanitizeNumber(data.fide_rating),
+    fide_rating: standardRating,
     local_rating: sanitizeNumber(data.local_rating),
     photo_url: sanitizeString(data.photo_url),
     bio: bioPayload,
