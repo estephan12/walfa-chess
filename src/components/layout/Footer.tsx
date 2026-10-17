@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { MapPin, Phone, Mail } from "lucide-react"
 import { FacebookIcon, InstagramIcon, YoutubeIcon, TikTokIcon } from "@/components/shared/SocialIcons"
+import { VisitorCounter } from "@/components/shared/VisitorCounter"
 import { SITE_NAME, CONTACT_INFO } from "@/lib/constants"
 
 export function Footer() {
@@ -163,9 +164,12 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Barra inferior de copyright */}
-        <div className="border-t border-slate-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+        {/* Barra inferior de copyright y contador de visitas en tiempo real */}
+        <div className="border-t border-slate-800/80 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {currentYear} {SITE_NAME}. Todos los derechos reservados.</p>
+          <div className="flex items-center justify-center">
+            <VisitorCounter />
+          </div>
           <p>República Dominicana</p>
         </div>
       </div>

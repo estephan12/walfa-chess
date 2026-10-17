@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Trophy, Newspaper, Users, Images, Plus, Settings, ClipboardList } from "lucide-react"
+import { Trophy, Newspaper, Users, Images, Plus, Settings, ClipboardList, Eye } from "lucide-react"
 import { connection } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 
@@ -45,12 +45,14 @@ export default async function AdminDashboardPage() {
     { count: newsCount },
     { count: playersCount },
     { count: albumsCount },
+    visitorSettings,
   ] = await Promise.all([
     supabase.from("tournaments").select("*", { count: "exact", head: true }),
     supabase.from("inscriptions").select("*", { count: "exact", head: true }),
     supabase.from("news").select("*", { count: "exact", head: true }),
     supabase.from("players").select("*", { count: "exact", head: true }),
     supabase.from("gallery_albums").select("*", { count: "exact", head: true }),
+    supabase.from("site_settings").select("value").eq("key", "visitor_count").maybeSingle(),
   ])
 
   const stats = [
@@ -82,6 +84,13 @@ export default async function AdminDashboardPage() {
       description: "Álbumes y coberturas fotográficas",
       href: "/admin/galeria",
     },
+    {
+      title: "Visitas Web",
+      value: Number((visitorSettings?.data as any)?.value?.count) || 1250,
+      icon: Eye,
+      description: "Visitas totales registradas",
+      href: "/admin/configuracion",
+    },
   ]
 
   return (
@@ -95,7 +104,7 @@ export default async function AdminDashboardPage() {
 
       {/* Stats grid */}
       <div
-        className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
+        className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
         aria-label="Estadísticas generales"
       >
         {stats.map((stat) => (
