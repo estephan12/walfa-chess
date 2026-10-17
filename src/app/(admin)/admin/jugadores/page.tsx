@@ -53,8 +53,8 @@ export default async function AdminJugadoresPage() {
               <thead className="bg-[#0B0F19]/60 text-xs uppercase font-bold text-[#F0F4F8] border-b border-[#2B5B84]">
                 <tr>
                   <th scope="col" className="px-6 py-4">Jugador</th>
-                  <th scope="col" className="px-6 py-4">Elo FIDE</th>
-                  <th scope="col" className="px-6 py-4 hidden md:table-cell">Elo Nacional</th>
+                  <th scope="col" className="px-6 py-4">Estándar (FIDE)</th>
+                  <th scope="col" className="px-6 py-4 hidden md:table-cell">Estándar (WALFA)</th>
                   <th scope="col" className="px-6 py-4 hidden lg:table-cell">Club / Asociación</th>
                   <th scope="col" className="px-6 py-4">Estado</th>
                   <th scope="col" className="px-6 py-4 text-right">Acciones</th>
@@ -116,10 +116,10 @@ export default async function AdminJugadoresPage() {
                           <span className="inline-flex items-center gap-1 font-mono font-bold text-amber-400 text-xs">
                             <Award className="h-3.5 w-3.5" />
                             {player.rating_standard || player.fide_rating}
-                            <span className="text-[10px] text-[#94A3B8] font-normal">Estándar</span>
+                            <span className="text-[10px] text-[#94A3B8] font-normal">FIDE</span>
                           </span>
                         ) : (
-                          <span className="text-xs text-[#94A3B8]/50 italic block">Sin Elo Estándar</span>
+                          <span className="text-xs text-[#94A3B8]/50 italic block">Sin Elo FIDE</span>
                         )}
                         <div className="flex items-center gap-2 text-[11px] text-[#94A3B8]">
                           {player.rating_rapid && (

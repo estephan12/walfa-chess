@@ -21,7 +21,7 @@ interface RankingTableProps {
   initialPlayers: Player[]
 }
 
-type RatingModality = "standard" | "rapid" | "blitz" | "local"
+type RatingModality = "standard" | "local" | "rapid" | "blitz"
 
 const RATING_MODALITIES: {
   id: RatingModality
@@ -29,10 +29,10 @@ const RATING_MODALITIES: {
   shortLabel: string
   icon: any
 }[] = [
-  { id: "standard", label: "Estándar (Clásico)", shortLabel: "Estándar", icon: Award },
-  { id: "rapid", label: "Rápido", shortLabel: "Rápido", icon: Clock },
-  { id: "blitz", label: "Blitz (Relámpago)", shortLabel: "Blitz", icon: Flame },
-  { id: "local", label: "Nacional / Local", shortLabel: "Nacional", icon: Shield },
+  { id: "standard", label: "Estándar (FIDE)", shortLabel: "Estándar (FIDE)", icon: Award },
+  { id: "local", label: "Estándar (WALFA)", shortLabel: "Estándar (WALFA)", icon: Shield },
+  { id: "rapid", label: "Rápido (WALFA)", shortLabel: "Rápido (WALFA)", icon: Clock },
+  { id: "blitz", label: "Blitz (WALFA)", shortLabel: "Blitz (WALFA)", icon: Flame },
 ]
 
 const CATEGORY_FILTERS = [
@@ -48,13 +48,13 @@ const CATEGORY_FILTERS = [
 function getPlayerRating(p: Player, type: RatingModality): number {
   switch (type) {
     case "standard":
-      return (p.rating_standard || p.fide_rating) ?? 0
+      return (p.fide_rating || p.rating_standard) ?? 0
+    case "local":
+      return (p.local_rating || p.rating_standard || p.fide_rating) ?? 0
     case "rapid":
       return p.rating_rapid ?? 0
     case "blitz":
       return p.rating_blitz ?? 0
-    case "local":
-      return p.local_rating ?? 0
   }
 }
 
@@ -264,7 +264,7 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
                   <th scope="col" className="px-4 py-4 w-14 text-center">Pos.</th>
                   <th scope="col" className="px-5 py-4 min-w-[200px]">Jugador</th>
                   
-                  {/* Estándar */}
+                  {/* Estándar (FIDE) */}
                   <th
                     scope="col"
                     className={`px-3 py-4 text-center transition-colors ${
@@ -273,11 +273,24 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
                   >
                     <span className="flex items-center justify-center gap-1">
                       <Award className="h-3.5 w-3.5 text-amber-500" />
-                      Estándar
+                      Estándar (FIDE)
                     </span>
                   </th>
 
-                  {/* Rápido */}
+                  {/* Estándar (WALFA) */}
+                  <th
+                    scope="col"
+                    className={`px-3 py-4 text-center transition-colors ${
+                      ratingType === "local" ? "bg-blue-50 text-[#1D64F2]" : ""
+                    }`}
+                  >
+                    <span className="flex items-center justify-center gap-1">
+                      <Shield className="h-3.5 w-3.5 text-emerald-600" />
+                      Estándar (WALFA)
+                    </span>
+                  </th>
+
+                  {/* Rápido (WALFA) */}
                   <th
                     scope="col"
                     className={`px-3 py-4 text-center transition-colors ${
@@ -286,11 +299,11 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
                   >
                     <span className="flex items-center justify-center gap-1">
                       <Clock className="h-3.5 w-3.5 text-blue-500" />
-                      Rápido
+                      Rápido (WALFA)
                     </span>
                   </th>
 
-                  {/* Blitz */}
+                  {/* Blitz (WALFA) */}
                   <th
                     scope="col"
                     className={`px-3 py-4 text-center transition-colors ${
@@ -299,20 +312,7 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
                   >
                     <span className="flex items-center justify-center gap-1">
                       <Flame className="h-3.5 w-3.5 text-orange-500" />
-                      Blitz
-                    </span>
-                  </th>
-
-                  {/* Nacional */}
-                  <th
-                    scope="col"
-                    className={`px-3 py-4 text-center hidden md:table-cell transition-colors ${
-                      ratingType === "local" ? "bg-blue-50 text-[#1D64F2]" : ""
-                    }`}
-                  >
-                    <span className="flex items-center justify-center gap-1">
-                      <Shield className="h-3.5 w-3.5 text-emerald-600" />
-                      Nacional
+                      Blitz (WALFA)
                     </span>
                   </th>
 
@@ -386,7 +386,7 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
                         </div>
                       </td>
 
-                      {/* Elo Estándar */}
+                      {/* 1. Elo Estándar (FIDE) */}
                       <td
                         className={`px-3 py-4 text-center ${
                           ratingType === "standard" ? "bg-blue-50/40" : ""
@@ -409,7 +409,28 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
                         )}
                       </td>
 
-                      {/* Elo Rápido */}
+                      {/* 2. Elo Estándar (WALFA) */}
+                      <td
+                        className={`px-3 py-4 text-center ${
+                          ratingType === "local" ? "bg-blue-50/40" : ""
+                        }`}
+                      >
+                        {locRating ? (
+                          <span
+                            className={`inline-flex items-center justify-center px-2 py-0.5 rounded-lg font-mono font-bold text-xs ${
+                              ratingType === "local"
+                                ? "bg-[#1D64F2] text-white shadow-sm"
+                                : "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                            }`}
+                          >
+                            {locRating}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-slate-400 italic">—</span>
+                        )}
+                      </td>
+
+                      {/* 3. Elo Rápido (WALFA) */}
                       <td
                         className={`px-3 py-4 text-center ${
                           ratingType === "rapid" ? "bg-blue-50/40" : ""
@@ -432,7 +453,7 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
                         )}
                       </td>
 
-                      {/* Elo Blitz */}
+                      {/* 4. Elo Blitz (WALFA) */}
                       <td
                         className={`px-3 py-4 text-center ${
                           ratingType === "blitz" ? "bg-blue-50/40" : ""
@@ -449,27 +470,6 @@ export function RankingTable({ initialPlayers }: RankingTableProps) {
                             }`}
                           >
                             {blzRating}
-                          </span>
-                        ) : (
-                          <span className="text-xs text-slate-400 italic">—</span>
-                        )}
-                      </td>
-
-                      {/* Elo Nacional */}
-                      <td
-                        className={`px-3 py-4 text-center hidden md:table-cell ${
-                          ratingType === "local" ? "bg-blue-50/40" : ""
-                        }`}
-                      >
-                        {locRating ? (
-                          <span
-                            className={`inline-flex items-center justify-center px-2 py-0.5 rounded-lg font-mono font-bold text-xs ${
-                              ratingType === "local"
-                                ? "bg-[#1D64F2] text-white shadow-sm"
-                                : "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                            }`}
-                          >
-                            {locRating}
                           </span>
                         ) : (
                           <span className="text-xs text-slate-400 italic">—</span>

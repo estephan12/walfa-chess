@@ -325,11 +325,11 @@ export function PlayerForm({
             <p className="text-[11px] text-[#94A3B8] mt-1">Código oficial FIDE</p>
           </div>
 
-          {/* Elo Estándar */}
+          {/* Elo Estándar (FIDE) */}
           <div>
             <label className="block text-sm font-medium text-[#F0F4F8] mb-1.5 flex items-center gap-1.5">
               <Award className="h-4 w-4 text-amber-400" />
-              Elo Estándar
+              Elo Estándar (FIDE)
             </label>
             <input
               type="number"
@@ -339,14 +339,31 @@ export function PlayerForm({
               placeholder="Ej. 2400"
               className="w-full bg-[#0B0F19] border border-[#2B5B84] rounded-xl px-4 py-2.5 text-sm text-[#F0F4F8] placeholder-[#94A3B8]/50 focus:outline-none focus:border-[#5FA8D3] focus:ring-1 focus:ring-[#5FA8D3] transition-all"
             />
-            <p className="text-[11px] text-[#94A3B8] mt-1">Clásico / FIDE</p>
+            <p className="text-[11px] text-[#94A3B8] mt-1">Rating FIDE Oficial</p>
           </div>
 
-          {/* Elo Rápido */}
+          {/* Elo Estándar (WALFA) */}
+          <div>
+            <label className="block text-sm font-medium text-[#F0F4F8] mb-1.5 flex items-center gap-1.5">
+              <Shield className="h-4 w-4 text-emerald-400" />
+              Elo Estándar (WALFA)
+            </label>
+            <input
+              type="number"
+              min={0}
+              max={3200}
+              {...register("local_rating")}
+              placeholder="Ej. 2450"
+              className="w-full bg-[#0B0F19] border border-[#2B5B84] rounded-xl px-4 py-2.5 text-sm text-[#F0F4F8] placeholder-[#94A3B8]/50 focus:outline-none focus:border-[#5FA8D3] focus:ring-1 focus:ring-[#5FA8D3] transition-all"
+            />
+            <p className="text-[11px] text-[#94A3B8] mt-1">Rating local / WALFA</p>
+          </div>
+
+          {/* Elo Rápido (WALFA) */}
           <div>
             <label className="block text-sm font-medium text-[#F0F4F8] mb-1.5 flex items-center gap-1.5">
               <Clock className="h-4 w-4 text-blue-400" />
-              Elo Rápido
+              Elo Rápido (WALFA)
             </label>
             <input
               type="number"
@@ -359,11 +376,11 @@ export function PlayerForm({
             <p className="text-[11px] text-[#94A3B8] mt-1">Modalidad Rápida</p>
           </div>
 
-          {/* Elo Blitz */}
+          {/* Elo Blitz (WALFA) */}
           <div>
             <label className="block text-sm font-medium text-[#F0F4F8] mb-1.5 flex items-center gap-1.5">
               <Flame className="h-4 w-4 text-orange-400" />
-              Elo Blitz
+              Elo Blitz (WALFA)
             </label>
             <input
               type="number"
@@ -374,23 +391,6 @@ export function PlayerForm({
               className="w-full bg-[#0B0F19] border border-[#2B5B84] rounded-xl px-4 py-2.5 text-sm text-[#F0F4F8] placeholder-[#94A3B8]/50 focus:outline-none focus:border-[#5FA8D3] focus:ring-1 focus:ring-[#5FA8D3] transition-all"
             />
             <p className="text-[11px] text-[#94A3B8] mt-1">Modalidad Relámpago</p>
-          </div>
-
-          {/* Elo Nacional / Local */}
-          <div>
-            <label className="block text-sm font-medium text-[#F0F4F8] mb-1.5 flex items-center gap-1.5">
-              <Shield className="h-4 w-4 text-emerald-400" />
-              Elo Nacional
-            </label>
-            <input
-              type="number"
-              min={0}
-              max={3200}
-              {...register("local_rating")}
-              placeholder="Ej. 2450"
-              className="w-full bg-[#0B0F19] border border-[#2B5B84] rounded-xl px-4 py-2.5 text-sm text-[#F0F4F8] placeholder-[#94A3B8]/50 focus:outline-none focus:border-[#5FA8D3] focus:ring-1 focus:ring-[#5FA8D3] transition-all"
-            />
-            <p className="text-[11px] text-[#94A3B8] mt-1">Rating local FDA</p>
           </div>
         </div>
 
