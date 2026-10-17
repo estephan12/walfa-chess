@@ -76,7 +76,7 @@ export function TournamentForm({ initialData, isEditing = false }: TournamentFor
       inscription_type: initialData?.inscription_type ?? "form",
       inscription_url: initialData?.inscription_url ?? "",
       organizer_name: initialData?.organizer_name ?? "Fundación WALFA-CHESS",
-      organizer_contact: initialData?.organizer_contact ?? "info@walfachess.com",
+      organizer_contact: initialData?.organizer_contact ?? "walfa-chess@hotmail.com",
       is_featured: initialData?.is_featured ?? false,
     },
   })

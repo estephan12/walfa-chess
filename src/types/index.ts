@@ -225,8 +225,9 @@ export interface SiteSettings {
   contact_email: string
   contact_phone: string
   contact_address: string
+  social_tiktok?: string
   social_instagram: string
-  social_facebook: string
+  social_facebook?: string
   social_youtube: string
   hero_image_url: string
   about_text: string

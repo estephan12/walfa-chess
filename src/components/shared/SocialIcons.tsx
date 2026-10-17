@@ -47,3 +47,18 @@ export function YoutubeIcon({ className = "h-4 w-4", ...props }: SVGProps<SVGSVG
     </svg>
   )
 }
+
+export function TikTokIcon({ className = "h-4 w-4", ...props }: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-2.901 2.888 2.894 2.894 0 0 1-2.892-2.888 2.895 2.895 0 0 1 2.892-2.89 2.87 2.87 0 0 1 1.25.283V9.584a6.34 6.34 0 0 0-1.25-.125C5.97 9.459 3.1 12.33 3.1 15.872 3.1 19.414 5.97 22.285 9.471 22.285c3.501 0 6.371-2.871 6.371-6.413V8.895a8.212 8.212 0 0 0 4.747 1.492v-3.7a4.83 4.83 0 0 1-1-.001z" />
+    </svg>
+  )
+}
+

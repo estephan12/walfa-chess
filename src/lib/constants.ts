@@ -114,3 +114,28 @@ export const DOMINICAN_PROVINCES = [
 
 export type DominicanProvince = (typeof DOMINICAN_PROVINCES)[number]
 
+// Información de contacto y redes oficiales
+export const CONTACT_INFO = {
+  email: "walfa-chess@hotmail.com",
+  phone: "(809) 123-4567",
+  address: "Santiago de los Caballeros, República Dominicana",
+  social: {
+    tiktok: {
+      name: "TikTok",
+      handle: "@walfachess",
+      url: "https://www.tiktok.com/@walfachess",
+    },
+    instagram: {
+      name: "Instagram",
+      handle: "walfachess",
+      url: "https://www.instagram.com/walfachess",
+    },
+    youtube: {
+      name: "YouTube",
+      handle: "@WALFA-CHESS",
+      url: "https://www.youtube.com/@WALFA-CHESS",
+    },
+  },
+} as const
+
+

@@ -4,8 +4,8 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { MapPin, Phone, Mail } from "lucide-react"
-import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/shared/SocialIcons"
-import { SITE_NAME } from "@/lib/constants"
+import { FacebookIcon, InstagramIcon, YoutubeIcon, TikTokIcon } from "@/components/shared/SocialIcons"
+import { SITE_NAME, CONTACT_INFO } from "@/lib/constants"
 
 export function Footer() {
   const [currentYear, setCurrentYear] = useState(2026)
@@ -124,8 +124,8 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-[#1D64F2] shrink-0" />
-                <a href="mailto:info@walfa-chess.com" className="hover:text-white transition-colors">
-                  info@walfa-chess.com
+                <a href={`mailto:${CONTACT_INFO.email}`} className="hover:text-white transition-colors">
+                  {CONTACT_INFO.email}
                 </a>
               </li>
             </ul>
@@ -133,16 +133,16 @@ export function Footer() {
             {/* Redes sociales con sus colores característicos */}
             <div className="flex items-center gap-2.5 mt-5">
               <a
-                href="https://facebook.com"
+                href={CONTACT_INFO.social.tiktok.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="w-7 h-7 rounded bg-[#1877F2] hover:opacity-90 flex items-center justify-center text-white transition-opacity shadow-sm"
+                aria-label="TikTok"
+                className="w-7 h-7 rounded bg-black border border-slate-700 hover:border-slate-500 hover:opacity-90 flex items-center justify-center text-white transition-all shadow-sm"
               >
-                <FacebookIcon className="h-4 w-4" />
+                <TikTokIcon className="h-4 w-4" />
               </a>
               <a
-                href="https://instagram.com"
+                href={CONTACT_INFO.social.instagram.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
@@ -151,7 +151,7 @@ export function Footer() {
                 <InstagramIcon className="h-4 w-4" />
               </a>
               <a
-                href="https://youtube.com"
+                href={CONTACT_INFO.social.youtube.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="YouTube"

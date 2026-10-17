@@ -11,8 +11,9 @@ import {
   Mail,
   ChevronDown,
 } from "lucide-react"
-import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/shared/SocialIcons"
+import { FacebookIcon, InstagramIcon, YoutubeIcon, TikTokIcon } from "@/components/shared/SocialIcons"
 import { cn } from "@/lib/utils"
+import { CONTACT_INFO } from "@/lib/constants"
 
 export function Navbar() {
   const pathname = usePathname()
@@ -36,15 +37,15 @@ export function Navbar() {
           <div className="flex items-center gap-4 sm:gap-6 flex-wrap">
             <div className="flex items-center gap-1.5 text-slate-300">
               <MapPin className="h-3.5 w-3.5 text-[#1D64F2] shrink-0" />
-              <span>Santiago de los Caballeros, Rep. Dom.</span>
+              <span>{CONTACT_INFO.address}</span>
             </div>
             <div className="hidden sm:flex items-center gap-1.5 text-slate-300">
               <Mail className="h-3.5 w-3.5 text-[#1D64F2] shrink-0" />
               <a
-                href="mailto:info@walfa-chess.com"
+                href={`mailto:${CONTACT_INFO.email}`}
                 className="hover:text-white transition-colors"
               >
-                info@walfa-chess.com
+                {CONTACT_INFO.email}
               </a>
             </div>
           </div>
@@ -54,16 +55,16 @@ export function Navbar() {
               Síguenos:
             </span>
             <a
-              href="https://facebook.com"
+              href={CONTACT_INFO.social.tiktok.url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Facebook"
-              className="text-slate-300 hover:text-[#1D64F2] transition-colors"
+              aria-label="TikTok"
+              className="text-slate-300 hover:text-white transition-colors"
             >
-              <FacebookIcon className="h-3.5 w-3.5" />
+              <TikTokIcon className="h-3.5 w-3.5" />
             </a>
             <a
-              href="https://instagram.com"
+              href={CONTACT_INFO.social.instagram.url}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
@@ -72,7 +73,7 @@ export function Navbar() {
               <InstagramIcon className="h-3.5 w-3.5" />
             </a>
             <a
-              href="https://youtube.com"
+              href={CONTACT_INFO.social.youtube.url}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="YouTube"
@@ -214,6 +215,44 @@ export function Navbar() {
                     INSCRIPCIONES
                   </button>
                 </Link>
+              </li>
+              <li className="pt-4 mt-2 border-t border-white/10 flex flex-col gap-3">
+                <a
+                  href={`mailto:${CONTACT_INFO.email}`}
+                  className="flex items-center gap-2 text-xs text-slate-300 hover:text-white transition-colors"
+                >
+                  <Mail className="h-3.5 w-3.5 text-[#1D64F2]" />
+                  <span>{CONTACT_INFO.email}</span>
+                </a>
+                <div className="flex items-center gap-4 pt-1">
+                  <a
+                    href={CONTACT_INFO.social.tiktok.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="TikTok"
+                    className="text-slate-300 hover:text-white transition-colors"
+                  >
+                    <TikTokIcon className="h-4 w-4" />
+                  </a>
+                  <a
+                    href={CONTACT_INFO.social.instagram.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="text-slate-300 hover:text-pink-400 transition-colors"
+                  >
+                    <InstagramIcon className="h-4 w-4" />
+                  </a>
+                  <a
+                    href={CONTACT_INFO.social.youtube.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="YouTube"
+                    className="text-slate-300 hover:text-red-500 transition-colors"
+                  >
+                    <YoutubeIcon className="h-4 w-4" />
+                  </a>
+                </div>
               </li>
             </ul>
           </div>
