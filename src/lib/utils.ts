@@ -1,4 +1,4 @@
-﻿import { clsx, type ClassValue } from "clsx"
+import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 /** Combina clases de Tailwind de forma segura */
@@ -24,23 +24,34 @@ export function slugify(text: string): string {
 
 /**
  * Formatea una fecha ISO para display en español (República Dominicana)
+ * Utiliza timeZone UTC para garantizar coincidencia idéntica entre servidor y cliente (evitando errores de hidratación)
  */
 export function formatDate(
-  date: string | Date,
+  date: string | Date | null | undefined,
   options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "long",
     year: "numeric",
   }
 ): string {
-  const d = typeof date === "string" ? new Date(date) : date
-  return new Intl.DateTimeFormat("es-DO", options).format(d)
+  if (!date) return ""
+  let d: Date
+  if (typeof date === "string") {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      d = new Date(`${date}T12:00:00Z`)
+    } else {
+      d = new Date(date)
+    }
+  } else {
+    d = date
+  }
+  return new Intl.DateTimeFormat("es-DO", { timeZone: "UTC", ...options }).format(d)
 }
 
 /**
  * Formatea una fecha corta: "22 ago. 2025"
  */
-export function formatDateShort(date: string | Date): string {
+export function formatDateShort(date: string | Date | null | undefined): string {
   return formatDate(date, { day: "numeric", month: "short", year: "numeric" })
 }
 
@@ -49,10 +60,10 @@ export function formatDateShort(date: string | Date): string {
  */
 export function formatDateRange(start: string, end?: string | null): string {
   if (!end) return formatDate(start)
-  const s = new Date(start)
-  const e = new Date(end)
-  if (s.getFullYear() === e.getFullYear() && s.getMonth() === e.getMonth()) {
-    return `${s.getDate()}–${formatDate(end, { day: "numeric", month: "long", year: "numeric" })}`
+  const s = new Date(/^\d{4}-\d{2}-\d{2}$/.test(start) ? `${start}T12:00:00Z` : start)
+  const e = new Date(/^\d{4}-\d{2}-\d{2}$/.test(end) ? `${end}T12:00:00Z` : end)
+  if (s.getUTCFullYear() === e.getUTCFullYear() && s.getUTCMonth() === e.getUTCMonth()) {
+    return `${s.getUTCDate()}–${formatDate(end, { day: "numeric", month: "long", year: "numeric" })}`
   }
   return `${formatDateShort(start)} – ${formatDateShort(end)}`
 }

@@ -35,12 +35,9 @@ export interface InscriptionWithRelations
 /**
  * Extrae la provincia del campo notes en caso de que no esté en la columna dedicada
  */
-export function extractProvince(notes: string | null | undefined, directProvince?: string | null): string | null {
-  if (directProvince && directProvince.trim().length > 0) {
-    return directProvince.trim()
-  }
+export function extractProvince(notes: string | null | undefined): string | null {
   if (!notes) return null
-  const match = notes.match(/Provincia:\s*([^|]+)/i)
+  const match = notes.match(/Provincia:\s*([^|\n\r]+)/i)
   return match ? match[1].trim() : null
 }
 
@@ -58,7 +55,6 @@ export async function getPublicInscriptionsByTournamentId(
     .select(`
       id,
       full_name,
-      province,
       notes,
       fide_id,
       status,
@@ -77,7 +73,7 @@ export async function getPublicInscriptionsByTournamentId(
   return data.map((item: any) => ({
     id: item.id,
     full_name: item.full_name,
-    province: extractProvince(item.notes, item.province),
+    province: extractProvince(item.notes),
     category_name: item.category?.name ?? null,
     fide_id: item.fide_id ?? null,
     status: item.status,

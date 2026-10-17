@@ -91,6 +91,7 @@ export async function submitInscriptionAction(
       .from("inscriptions")
       .select("id, status")
       .eq("tournament_id", tournament_id)
+      .neq("status", "rejected")
       .or(`phone.eq.${cleanPhone},email.eq.${cleanEmail}`)
       .maybeSingle()
 
@@ -121,7 +122,6 @@ export async function submitInscriptionAction(
         full_name: full_name.trim(),
         email: cleanEmail,
         phone: cleanPhone,
-        province: cleanProvince,
         fide_id: fide_id && fide_id.trim().length > 0 ? fide_id.trim() : null,
         notes: combinedNotes,
         status: "pending",
@@ -131,7 +131,12 @@ export async function submitInscriptionAction(
 
     if (insertError || !inserted) {
       console.error("Error al registrar inscripción:", insertError)
-      return { success: false, error: "No se pudo registrar la inscripción. Inténtalo nuevamente." }
+      return {
+        success: false,
+        error: insertError?.message
+          ? `No se pudo registrar la inscripción: ${insertError.message}`
+          : "No se pudo registrar la inscripción. Inténtalo nuevamente.",
+      }
     }
 
     revalidatePath("/inscripciones")
