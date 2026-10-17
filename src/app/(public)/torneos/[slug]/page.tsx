@@ -18,6 +18,8 @@ import {
 
 import { getTournamentBySlug } from "@/lib/queries/tournamentQueries"
 import { getAlbumByTournamentId } from "@/lib/queries/galleryQueries"
+import { getPublicInscriptionsByTournamentId } from "@/lib/queries/inscriptionQueries"
+import { RegisteredPlayersList } from "@/components/public/RegisteredPlayersList"
 import { StatusBadge } from "@/components/shared/StatusBadge"
 import { Button } from "@/components/ui/button"
 import { cacheLife } from "next/cache"
@@ -63,10 +65,20 @@ export default async function TorneoPage({ params }: TorneoPageProps) {
     notFound()
   }
 
-  const album = await getAlbumByTournamentId(tournament.id)
+  const [album, registeredPlayers] = await Promise.all([
+    getAlbumByTournamentId(tournament.id),
+    getPublicInscriptionsByTournamentId(tournament.id),
+  ])
+
+  const totalRegistered = registeredPlayers.length
+  const maxParticipants = tournament.max_participants
+  const hasLimit = typeof maxParticipants === "number" && maxParticipants > 0
+  const availableSpots = hasLimit ? Math.max(0, maxParticipants - totalRegistered) : null
+  const isFull = hasLimit && availableSpots === 0
 
   const isRegistrationOpen =
     tournament.status === "published" && tournament.inscription_type !== "closed"
+
 
   return (
     <div className="min-h-screen bg-white text-slate-900 pb-24">
@@ -206,6 +218,25 @@ export default async function TorneoPage({ params }: TorneoPageProps) {
                   </div>
                 </div>
 
+                {/* Cupos Disponibles */}
+                <div className="flex items-start gap-3.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <Trophy className="h-5 w-5 text-[#1D64F2] shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-xs font-bold text-slate-500 uppercase">Disponibilidad de Cupos</p>
+                    <p className="font-bold text-slate-900 mt-0.5">
+                      {hasLimit ? (
+                        isFull ? (
+                          <span className="text-rose-600 font-extrabold uppercase">¡Cupos Agotados!</span>
+                        ) : (
+                          `${availableSpots} cupos disponibles`
+                        )
+                      ) : (
+                        "Inscripción Abierta"
+                      )}
+                    </p>
+                  </div>
+                </div>
+
                 {/* Ubicación */}
                 <div className="sm:col-span-2 flex items-start justify-between gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
                   <div className="flex items-start gap-3.5">
@@ -231,6 +262,14 @@ export default async function TorneoPage({ params }: TorneoPageProps) {
                 </div>
               </div>
             </div>
+
+            {/* Listado de Jugadores Inscritos */}
+            <RegisteredPlayersList
+              players={registeredPlayers}
+              maxParticipants={tournament.max_participants}
+              tournamentSlug={tournament.slug}
+              isRegistrationOpen={isRegistrationOpen}
+            />
 
             {/* Bases & Reglamento Técnico */}
             {tournament.content && (
@@ -271,7 +310,65 @@ export default async function TorneoPage({ params }: TorneoPageProps) {
                 </div>
               )}
 
-              {isRegistrationOpen ? (
+              {/* Cupos y disponibilidad */}
+              <div className="mb-6 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                <div className="flex items-center justify-between text-xs mb-1.5 font-bold">
+                  <span className="text-slate-500 uppercase">Cupos Disponibles</span>
+                  <span
+                    className={
+                      isFull
+                        ? "text-rose-600 uppercase"
+                        : hasLimit && availableSpots! <= 5
+                        ? "text-amber-600"
+                        : "text-emerald-600"
+                    }
+                  >
+                    {isFull
+                      ? "Agotados"
+                      : hasLimit
+                      ? `${availableSpots} libres`
+                      : "Ilimitados"}
+                  </span>
+                </div>
+                {hasLimit && (
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200">
+                    <div
+                      className={`h-full rounded-full transition-all duration-300 ${
+                        isFull
+                          ? "bg-rose-500"
+                          : availableSpots! <= 5
+                          ? "bg-amber-500"
+                          : "bg-[#1D64F2]"
+                      }`}
+                      style={{
+                        width: `${Math.min(
+                          100,
+                          Math.round((totalRegistered / tournament.max_participants!) * 100)
+                        )}%`,
+                      }}
+                    />
+                  </div>
+                )}
+                <div className="flex items-center justify-between text-[11px] text-slate-500 mt-2">
+                  <span>{totalRegistered} inscritos</span>
+                  {hasLimit && <span>Límite: {tournament.max_participants}</span>}
+                </div>
+              </div>
+
+              {isFull ? (
+                <div className="space-y-3">
+                  <Button
+                    size="lg"
+                    disabled
+                    className="w-full bg-rose-100 text-rose-700 border border-rose-200 font-bold text-base py-4 cursor-not-allowed opacity-90 shadow-none"
+                  >
+                    Cupos Agotados
+                  </Button>
+                  <p className="text-[11px] text-center text-rose-600 font-semibold">
+                    Este torneo ha completado su límite de participantes.
+                  </p>
+                </div>
+              ) : isRegistrationOpen ? (
                 <div className="space-y-3">
                   <Link
                     href={

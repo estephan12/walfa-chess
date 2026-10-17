@@ -39,7 +39,7 @@ export async function submitInscriptionAction(
     // 1. Validar que el torneo existe y está abierto
     const { data: tournament, error: tournamentError } = await supabase
       .from("tournaments")
-      .select("id, title, status, inscription_type, registration_deadline, max_participants")
+      .select("id, title, slug, status, inscription_type, registration_deadline, max_participants")
       .eq("id", tournament_id)
       .single()
 
@@ -121,6 +121,7 @@ export async function submitInscriptionAction(
         full_name: full_name.trim(),
         email: cleanEmail,
         phone: cleanPhone,
+        province: cleanProvince,
         fide_id: fide_id && fide_id.trim().length > 0 ? fide_id.trim() : null,
         notes: combinedNotes,
         status: "pending",
@@ -135,6 +136,10 @@ export async function submitInscriptionAction(
 
     revalidatePath("/inscripciones")
     revalidatePath("/admin/inscripciones")
+    revalidatePath("/torneos")
+    if (tournament.slug) {
+      revalidatePath(`/torneos/${tournament.slug}`)
+    }
 
     return {
       success: true,

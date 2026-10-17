@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Calendar, MapPin, Trophy, ArrowRight } from "lucide-react"
+import { Calendar, MapPin, Trophy, ArrowRight, Users } from "lucide-react"
 import { formatDateRange, getTournamentTypeLabel } from "@/lib/utils"
 import type { Tournament } from "@/types"
 
@@ -57,6 +57,15 @@ export function TournamentCard({ tournament, className = "" }: TournamentCardPro
             <div className="flex items-center gap-2">
               <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
               <span className="line-clamp-1 text-slate-600">{tournament.location}</span>
+            </div>
+          )}
+
+          {tournament.max_participants && (
+            <div className="flex items-center gap-2">
+              <Users className="h-3.5 w-3.5 text-[#1D64F2] shrink-0" />
+              <span className="text-slate-600 font-medium">
+                Cupo máx: {tournament.max_participants} jugadores
+              </span>
             </div>
           )}
         </div>

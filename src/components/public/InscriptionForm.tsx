@@ -63,6 +63,11 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
       return
     }
 
+    if (currentTournament?.is_full) {
+      setErrorMessage("Los cupos para este torneo se encuentran agotados.")
+      return
+    }
+
     if (!fullName.trim() || fullName.trim().length < 3) {
       setErrorMessage("Por favor, ingresa tu nombre y apellido (mínimo 3 caracteres).")
       return
@@ -256,45 +261,110 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
         >
           {tournaments.map((t) => (
             <option key={t.id} value={t.id}>
-              {t.title} — ({formatDate(t.start_date)})
+              {t.title} — ({formatDate(t.start_date)}){" "}
+              {t.is_full
+                ? "— [CUPOS AGOTADOS]"
+                : t.available_spots !== null
+                ? `— (${t.available_spots} cupos disponibles)`
+                : ""}
             </option>
           ))}
         </select>
 
         {/* Ficha rápida del torneo seleccionado */}
         {currentTournament && (
-          <div className="mt-5 p-5 rounded-xl bg-slate-50 border border-slate-200 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-            <div className="flex items-start gap-2.5">
-              <Calendar className="h-4 w-4 text-[#1D64F2] shrink-0 mt-0.5" />
-              <div>
-                <span className="text-slate-500 block font-semibold">Fecha:</span>
-                <span className="text-slate-900 font-bold">
-                  {formatDateRange(currentTournament.start_date, currentTournament.end_date)}
-                </span>
+          <div className="mt-5 space-y-3">
+            <div className="p-5 rounded-xl bg-slate-50 border border-slate-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+              <div className="flex items-start gap-2.5">
+                <Calendar className="h-4 w-4 text-[#1D64F2] shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-slate-500 block font-semibold">Fecha:</span>
+                  <span className="text-slate-900 font-bold">
+                    {formatDateRange(currentTournament.start_date, currentTournament.end_date)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2.5">
+                <MapPin className="h-4 w-4 text-[#1D64F2] shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-slate-500 block font-semibold">Sede:</span>
+                  <span className="text-slate-900 font-bold">
+                    {currentTournament.location || "Por definir"}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2.5">
+                <DollarSign className="h-4 w-4 text-[#1D64F2] shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-slate-500 block font-semibold">Costo:</span>
+                  <span className="text-[#1D64F2] font-black">
+                    {currentTournament.entry_fee && currentTournament.entry_fee > 0
+                      ? formatCurrency(currentTournament.entry_fee)
+                      : "Gratis"}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2.5">
+                <Trophy className="h-4 w-4 text-[#1D64F2] shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-slate-500 block font-semibold">Cupos:</span>
+                  <span
+                    className={`font-black ${
+                      currentTournament.is_full
+                        ? "text-rose-600 uppercase"
+                        : typeof currentTournament.available_spots === "number" &&
+                          currentTournament.available_spots <= 5
+                        ? "text-amber-600"
+                        : "text-emerald-700"
+                    }`}
+                  >
+                    {currentTournament.is_full
+                      ? "Agotados"
+                      : typeof currentTournament.available_spots === "number"
+                      ? `${currentTournament.available_spots} disponibles`
+                      : "Sin límite"}
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div className="flex items-start gap-2.5">
-              <MapPin className="h-4 w-4 text-[#1D64F2] shrink-0 mt-0.5" />
-              <div>
-                <span className="text-slate-500 block font-semibold">Sede:</span>
-                <span className="text-slate-900 font-bold">
-                  {currentTournament.location || "Por definir"}
-                </span>
+            {/* Banner de alerta si está lleno o enlace a nómina */}
+            {currentTournament.is_full ? (
+              <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-rose-600 shrink-0" />
+                  <span>
+                    Este torneo ha completado su límite máximo de{" "}
+                    <strong>{currentTournament.max_participants} participantes</strong>. Los cupos
+                    están agotados.
+                  </span>
+                </div>
+                <Link
+                  href={`/torneos/${currentTournament.slug}`}
+                  target="_blank"
+                  className="text-rose-700 underline font-bold shrink-0 hover:text-rose-900"
+                >
+                  Ver inscritos →
+                </Link>
               </div>
-            </div>
-
-            <div className="flex items-start gap-2.5">
-              <DollarSign className="h-4 w-4 text-[#1D64F2] shrink-0 mt-0.5" />
-              <div>
-                <span className="text-slate-500 block font-semibold">Costo:</span>
-                <span className="text-[#1D64F2] font-black">
-                  {currentTournament.entry_fee && currentTournament.entry_fee > 0
-                    ? formatCurrency(currentTournament.entry_fee)
-                    : "Gratis"}
+            ) : (
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs text-slate-500 px-1">
+                <span>
+                  Actualmente hay <strong>{currentTournament.inscriptions_count || 0}</strong> jugadores
+                  inscritos {currentTournament.max_participants ? `de ${currentTournament.max_participants} máx.` : ""}.
                 </span>
+                <Link
+                  href={`/torneos/${currentTournament.slug}`}
+                  target="_blank"
+                  className="text-[#1D64F2] font-bold hover:underline inline-flex items-center gap-1"
+                >
+                  Ver nómina de inscritos <ArrowRight className="h-3 w-3" />
+                </Link>
               </div>
-            </div>
+            )}
           </div>
         )}
       </div>
@@ -408,20 +478,31 @@ export function InscriptionForm({ tournaments, initialSlug }: InscriptionFormPro
 
       {/* Botón de Envío */}
       <div className="text-center pt-2">
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          size="lg"
-          className="w-full sm:w-auto min-w-[260px] bg-[#1D64F2] text-white hover:bg-[#1554cf] font-bold text-base py-4 shadow-md"
-        >
-          {isSubmitting ? (
-            <span className="flex items-center gap-2">
-              <Loader2 className="h-5 w-5 animate-spin" /> Procesando inscripción...
-            </span>
-          ) : (
-            "Completar Inscripción"
-          )}
-        </Button>
+        {currentTournament?.is_full ? (
+          <Button
+            type="button"
+            disabled
+            size="lg"
+            className="w-full sm:w-auto min-w-[260px] bg-rose-100 text-rose-700 border border-rose-200 font-bold text-base py-4 cursor-not-allowed shadow-none"
+          >
+            Cupos Agotados para este Torneo
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            size="lg"
+            className="w-full sm:w-auto min-w-[260px] bg-[#1D64F2] text-white hover:bg-[#1554cf] font-bold text-base py-4 shadow-md"
+          >
+            {isSubmitting ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="h-5 w-5 animate-spin" /> Procesando inscripción...
+              </span>
+            ) : (
+              "Completar Inscripción"
+            )}
+          </Button>
+        )}
         <p className="text-[11px] text-slate-500 mt-3">
           Al enviar este formulario confirmas tu solicitud para el torneo seleccionado.
         </p>
