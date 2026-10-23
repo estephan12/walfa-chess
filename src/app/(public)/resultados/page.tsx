@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import Image from "next/image"
 import { Suspense } from "react"
 import { Trophy, Calendar, MapPin, ArrowRight, ListOrdered, Sparkles } from "lucide-react"
 import { getPublicTournamentsWithResults } from "@/lib/queries/resultQueries"
@@ -33,77 +32,59 @@ async function ResultsList() {
       {tournaments.map((t) => (
         <div
           key={t.id}
-          className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between hover:shadow-md hover:border-[#1D64F2]/40 transition-all group"
+          className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm flex flex-col justify-between hover:shadow-md hover:border-[#1D64F2]/40 transition-all group"
         >
-          <div>
-            {/* Imagen de portada si existe */}
-            {t.cover_image_url ? (
-              <div className="relative h-44 w-full bg-slate-900 overflow-hidden border-b border-slate-200">
-                <Image
-                  src={t.cover_image_url}
-                  alt={t.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
-                <div className="absolute top-3 left-3">
-                  <StatusBadge status={t.status} />
-                </div>
-              </div>
-            ) : (
-              <div className="p-6 pb-0 flex items-center justify-between">
-                <StatusBadge status={t.status} />
-              </div>
-            )}
-
-            <div className="p-6 space-y-4">
-              <div className="flex items-center gap-2 text-xs text-slate-500 font-mono">
+          <div className="space-y-5">
+            {/* Estado y Fecha */}
+            <div className="flex items-center justify-between gap-2">
+              <StatusBadge status={t.status} />
+              <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono">
                 <Calendar className="h-3.5 w-3.5 text-[#1D64F2]" />
                 {formatDateShort(t.start_date)}
-                {t.location && (
-                  <>
-                    <span>•</span>
-                    <span className="truncate flex items-center gap-1">
-                      <MapPin className="h-3 w-3 text-[#1D64F2]" />
-                      {t.location}
-                    </span>
-                  </>
-                )}
               </div>
+            </div>
 
+            {/* Título y Ubicación */}
+            <div className="space-y-1.5">
               <h2 className="text-xl font-bold text-slate-900 group-hover:text-[#1D64F2] transition-colors line-clamp-2">
                 <Link href={`/resultados/${t.id}`}>
                   {t.title}
                 </Link>
               </h2>
+              {t.location && (
+                <p className="text-xs text-slate-500 flex items-center gap-1 truncate">
+                  <MapPin className="h-3.5 w-3.5 text-[#1D64F2] shrink-0" />
+                  <span>{t.location}</span>
+                </p>
+              )}
+            </div>
 
-              {/* Campeón / Cuadro de Honor Preview */}
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                {t.winner ? (
-                  <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 flex items-center gap-1">
-                      <Trophy className="h-3.5 w-3.5" /> Campeón Oficial
-                    </span>
-                    <p className="font-bold text-base text-slate-900 mt-0.5 truncate">
-                      {t.winner.player_name}
-                    </p>
-                    {t.winner.points !== null && (
-                      <p className="text-xs text-slate-600">
-                        Puntuación: <strong className="text-amber-700 font-mono">{t.winner.points} pts</strong>
-                        {t.winner.prize_won ? ` • ${t.winner.prize_won}` : ""}
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  <p className="text-xs italic text-slate-500">
-                    Posiciones en proceso de homologación
+            {/* Campeón / Cuadro de Honor Preview */}
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+              {t.winner ? (
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 flex items-center gap-1">
+                    <Trophy className="h-3.5 w-3.5" /> Campeón Oficial
+                  </span>
+                  <p className="font-bold text-base text-slate-900 mt-0.5 truncate">
+                    {t.winner.player_name}
                   </p>
-                )}
-              </div>
+                  {t.winner.points !== null && (
+                    <p className="text-xs text-slate-600">
+                      Puntuación: <strong className="text-amber-700 font-mono">{t.winner.points} pts</strong>
+                      {t.winner.prize_won ? ` • ${t.winner.prize_won}` : ""}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <p className="text-xs italic text-slate-500">
+                  Posiciones en proceso de homologación
+                </p>
+              )}
             </div>
           </div>
 
-          <div className="p-6 pt-0">
+          <div className="pt-6">
             <Link
               href={`/resultados/${t.id}`}
               className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#1D64F2] hover:bg-[#1554cf] text-white text-xs font-bold shadow-sm transition-all cursor-pointer"

@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import Image from "next/image"
 import {
   Calendar,
   MapPin,
@@ -64,19 +63,7 @@ export default async function ResultadosTorneoPage({ params }: Props) {
       </div>
 
       {/* CABECERA DEL TORNEO */}
-      <div className="relative rounded-2xl bg-white border border-slate-200 p-6 sm:p-10 shadow-sm overflow-hidden">
-        {tournament.cover_image_url && (
-          <div className="absolute inset-0 opacity-5 blur-xl pointer-events-none">
-            <Image
-              src={tournament.cover_image_url}
-              alt=""
-              fill
-              className="object-cover"
-            />
-          </div>
-        )}
-
-        <div className="relative z-10 space-y-4">
+      <div className="rounded-2xl bg-white border border-slate-200 p-6 sm:p-10 shadow-sm space-y-4">
           <div className="flex items-center gap-2 flex-wrap">
             <StatusBadge status={tournament.status} />
             <span className="text-xs text-slate-500 font-mono flex items-center gap-1">
@@ -143,7 +130,6 @@ export default async function ResultadosTorneoPage({ params }: Props) {
               </span>
             </div>
           </div>
-        </div>
       </div>
 
       {/* VISTA DE PODIO Y TABLA DE POSICIONES */}
